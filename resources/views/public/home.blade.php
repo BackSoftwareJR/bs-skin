@@ -9,7 +9,7 @@
 {{-- Renderizza blocchi CMS dinamici --}}
 @php 
     $blocks = \App\Models\Block::where('location', 'homepage')
-        ->where('active', true)
+        ->active()
         ->orderBy('sort_order')
         ->get();
 @endphp

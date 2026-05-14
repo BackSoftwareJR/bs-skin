@@ -124,8 +124,7 @@ class CartDrawer extends Component
         // TODO: delegare a ApplyCouponAction quando disponibile
         // Logica semplificata per ora
         $coupon = Coupon::where('code', $this->couponCode)
-            ->where('active', true)
-            ->where('expires_at', '>', now())
+            ->valid()
             ->first();
 
         if (!$coupon) {

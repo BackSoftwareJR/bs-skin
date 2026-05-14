@@ -23,7 +23,7 @@
 
         <!-- Renderizza blocchi CMS dinamici -->
         @php 
-            $blocks = $page->blocks()->where('active', true)->orderBy('sort_order')->get();
+            $blocks = $page->blocks()->active()->orderBy('sort_order')->get();
         @endphp
 
         @if($blocks->count() > 0)

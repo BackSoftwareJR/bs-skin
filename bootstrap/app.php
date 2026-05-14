@@ -22,28 +22,52 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (\App\Exceptions\OtpRateLimitException $e, $request) {
+        $exceptions->render(function (\App\Exceptions\OtpRateLimitException $e, \Illuminate\Http\Request $request) {
             if ($request->expectsJson() || $request->header('X-Livewire')) {
                 return response()->json(['message' => $e->getMessage()], 429);
             }
             return back()->withErrors(['otp' => $e->getMessage()]);
         });
         
-        // Exception mapping
-        $exceptionMap = [
-            \App\Exceptions\OtpInvalidException::class => 422,
-            \App\Exceptions\OutOfStockException::class => 422,
-            \App\Exceptions\InsufficientStockException::class => 422,
-            \App\Exceptions\CouponNotFoundException::class => 422,
-            \App\Exceptions\CouponNotApplicableException::class => 422,
-            \App\Exceptions\InvalidOrderTransitionException::class => 422,
-        ];
-        foreach ($exceptionMap as $exceptionClass => $statusCode) {
-            $exceptions->render(function ($e, $request) use ($statusCode) {
-                if ($request->expectsJson() || $request->header('X-Livewire')) {
-                    return response()->json(['message' => $e->getMessage()], $statusCode);
-                }
-                return back()->withErrors(['error' => $e->getMessage()]);
-            }, $exceptionClass);
-        }
+        $exceptions->render(function (\App\Exceptions\OtpInvalidException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 422);
+            }
+            return back()->withErrors(['otp' => $e->getMessage()]);
+        });
+        
+        $exceptions->render(function (\App\Exceptions\OutOfStockException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 422);
+            }
+            return back()->withErrors(['cart' => $e->getMessage()]);
+        });
+        
+        $exceptions->render(function (\App\Exceptions\InsufficientStockException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 422);
+            }
+            return back()->withErrors(['cart' => $e->getMessage()]);
+        });
+        
+        $exceptions->render(function (\App\Exceptions\CouponNotFoundException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 404);
+            }
+            return back()->withErrors(['coupon' => $e->getMessage()]);
+        });
+        
+        $exceptions->render(function (\App\Exceptions\CouponNotApplicableException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 422);
+            }
+            return back()->withErrors(['coupon' => $e->getMessage()]);
+        });
+        
+        $exceptions->render(function (\App\Exceptions\InvalidOrderTransitionException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->header('X-Livewire')) {
+                return response()->json(['message' => $e->getMessage()], 422);
+            }
+            return back()->withErrors(['order' => $e->getMessage()]);
+        });
     })->create();
