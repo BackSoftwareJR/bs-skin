@@ -51,8 +51,14 @@ class BlogPost extends Model implements HasMedia
         $this->addMediaCollection('content_images');
     }
 
-    protected static $logAttributes = ['title', 'is_published'];
-    protected static $logName = 'blog_posts';
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['title', 'is_published'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function category(): BelongsTo
     {

@@ -64,9 +64,14 @@ class Brand extends Model implements HasMedia
     }
 
     // Spatie Activity Log
-    protected static $logAttributes = ['name', 'is_active'];
-    protected static $logName = 'brands';
-    protected static $logOnlyDirty = true;
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'is_active'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // Relations
     public function products(): HasMany

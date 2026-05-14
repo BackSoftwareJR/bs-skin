@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    public function index(SitemapService $sitemapService): Response
+    public function __invoke(SitemapService $sitemapService): Response
     {
         return $sitemapService->serve();
     }

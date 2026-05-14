@@ -71,9 +71,13 @@ class Category extends Model implements HasMedia
     }
 
     // Spatie Activity Log
-    protected static $logAttributes = ['name', 'is_active', 'type'];
-    protected static $logName = 'categories';
-    protected static $logOnlyDirty = true;
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'is_active', 'type'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // Relations
     public function parent(): BelongsTo

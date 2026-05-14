@@ -42,8 +42,14 @@ class Page extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
-    protected static $logAttributes = ['title', 'is_published'];
-    protected static $logName = 'pages';
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['title', 'is_published'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function blocks(): HasMany
     {

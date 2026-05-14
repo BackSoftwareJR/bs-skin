@@ -100,6 +100,15 @@ class Product extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['name', 'status', 'price', 'sku'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
     // Spatie Media Library
     public function registerMediaCollections(): void
     {
@@ -134,10 +143,7 @@ class Product extends Model implements HasMedia
         ];
     }
 
-    // Spatie Activity Log
-    protected static $logAttributes = ['name', 'status', 'is_featured'];
-    protected static $logName = 'products';
-    protected static $logOnlyDirty = true;
+    // Spatie Activity Log (already added above)
 
     // Boot method
     protected static function boot(): void

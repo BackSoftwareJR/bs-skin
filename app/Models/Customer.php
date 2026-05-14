@@ -40,9 +40,14 @@ class Customer extends Model
     }
 
     // Spatie Activity Log
-    protected static $logAttributes = ['email', 'name', 'surname', 'is_active'];
-    protected static $logName = 'customers';
-    protected static $logOnlyDirty = true;
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['email', 'first_name', 'last_name', 'is_active'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // Relations
     public function addresses(): HasMany

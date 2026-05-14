@@ -33,8 +33,14 @@ class Coupon extends Model
         ];
     }
 
-    protected static $logAttributes = ['code', 'is_active', 'usage_count'];
-    protected static $logName = 'coupons';
+    // Spatie Activity Log
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['code', 'is_active', 'usage_count'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function customer(): BelongsTo
     {

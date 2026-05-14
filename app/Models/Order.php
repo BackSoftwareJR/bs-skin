@@ -75,9 +75,13 @@ class Order extends Model
     }
 
     // Spatie Activity Log
-    protected static $logAttributes = ['status', 'payment_status', 'total'];
-    protected static $logName = 'orders';
-    protected static $logOnlyDirty = true;
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['status', 'payment_status', 'total'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // Relations
     public function customer(): BelongsTo
