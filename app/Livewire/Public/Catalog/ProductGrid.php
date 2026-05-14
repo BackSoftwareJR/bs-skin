@@ -69,7 +69,7 @@ class ProductGrid extends Component
     {
         $query = Product::query()
             ->with(['brand', 'categories', 'media', 'variants.inventory'])
-            ->where('published', true);
+            ->published();
 
         // Ricerca testuale
         if ($this->search) {

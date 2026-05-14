@@ -62,7 +62,7 @@ class ProductSearch extends Component
         $this->hasSearched = true;
 
         // Ricerca prodotti
-        $this->productResults = Product::where('published', true)
+        $this->productResults = Product::published()
             ->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->query . '%')
                   ->orWhere('description', 'like', '%' . $this->query . '%')
@@ -73,7 +73,7 @@ class ProductSearch extends Component
             ->get();
 
         // Ricerca pagine/blog
-        $this->pageResults = Page::where('published', true)
+        $this->pageResults = Page::published()
             ->where(function ($q) {
                 $q->where('title', 'like', '%' . $this->query . '%')
                   ->orWhere('excerpt', 'like', '%' . $this->query . '%')
