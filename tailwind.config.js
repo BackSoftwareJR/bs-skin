@@ -1,36 +1,170 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-import typography from '@tailwindcss/typography';
-import aspectRatio from '@tailwindcss/aspect-ratio';
-
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './vendor/filament/**/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './app/Filament/**/*.php',
-        './app/Livewire/**/*.php',
-    ],
-    // TODO: integrare design tokens da docs/design-system/tailwind.config.js
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                display: ['Cormorant Garamond', ...defaultTheme.fontFamily.serif],
-            },
-            colors: {
-                brand: {
-                    gold: '#B08D57',
-                    'gold-light': '#C9A96E',
-                    'gold-dark': '#8A6D3B',
-                    dark: '#0F172A',
-                    cream: '#FAF8F5',
-                },
-            },
+  content: [
+    './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './app/Livewire/**/*.php',
+    './app/Filament/**/*.php',
+    './vendor/filament/**/*.blade.php',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          primary: '#0F8A8A',
+          'primary-hover': '#0B7575',
+          'primary-soft': '#E6F4F4',
+          'primary-50': '#F0FAFA',
+          'primary-100': '#D9F0F0',
+          'primary-200': '#B3E0E0',
+          'primary-300': '#7FCBCB',
+          'primary-400': '#3FAEAE',
+          'primary-500': '#0F8A8A',
+          'primary-600': '#0B7575',
+          'primary-700': '#086060',
+          'primary-800': '#064848',
+          'primary-900': '#043333',
+          'primary-950': '#021F1F',
+          accent: '#14B8A6',
+          'accent-soft': '#CCFBF1',
+          ink: '#0F172A',
+          'ink-soft': '#334155',
+          surface: '#FFFFFF',
+          'surface-soft': '#F8FAFC',
+          'surface-sunken': '#F1F5F9',
+          muted: '#64748B',
+          border: '#E2E8F0',
+          'border-strong': '#CBD5E1',
         },
+        neutral: {
+          50: '#F8FAFC',
+          100: '#F1F5F9',
+          200: '#E2E8F0',
+          300: '#CBD5E1',
+          400: '#94A3B8',
+          500: '#64748B',
+          600: '#475569',
+          700: '#334155',
+          800: '#1E293B',
+          900: '#0F172A',
+          950: '#020617',
+        },
+        success: {
+          DEFAULT: '#059669',
+          soft: '#ECFDF5',
+        },
+        warning: {
+          DEFAULT: '#D97706',
+          soft: '#FFFBEB',
+        },
+        danger: {
+          DEFAULT: '#DC2626',
+          soft: '#FEF2F2',
+        },
+        info: {
+          DEFAULT: '#0284C7',
+          soft: '#F0F9FF',
+        },
+        glass: {
+          light: 'rgba(255, 255, 255, 0.72)',
+          tint: 'rgba(15, 138, 138, 0.08)',
+          dark: 'rgba(15, 23, 42, 0.55)',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'HuaweiSans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      fontSize: {
+        '2xs': ['0.6875rem', { lineHeight: '0.875rem' }],
+        'xs': ['0.75rem', { lineHeight: '1rem' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+        '5xl': ['3rem', { lineHeight: '3.25rem' }],
+        '6xl': ['4rem', { lineHeight: '4rem' }],
+        '7xl': ['5rem', { lineHeight: '5rem' }],
+      },
+      letterSpacing: {
+        tighter: '-0.04em',
+        tight: '-0.02em',
+        wide: '0.05em',
+        widest: '0.15em',
+      },
+      borderRadius: {
+        sm: '4px',
+        md: '6px',
+        lg: '8px',
+        xl: '12px',
+        '2xl': '16px',
+        '3xl': '24px',
+      },
+      boxShadow: {
+        'soft-sm': '0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.04)',
+        'soft-md': '0 4px 8px rgba(15,23,42,0.05), 0 2px 4px rgba(15,23,42,0.04)',
+        'soft-lg': '0 12px 24px rgba(15,23,42,0.07), 0 4px 8px rgba(15,23,42,0.05)',
+        'soft-xl': '0 24px 48px rgba(15,23,42,0.09), 0 12px 24px rgba(15,23,42,0.07)',
+        'glass': '0 8px 32px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.4)',
+        'inner-soft': 'inset 0 1px 2px rgba(15,23,42,0.04)',
+      },
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        DEFAULT: '8px',
+        md: '12px',
+        lg: '16px',
+        xl: '24px',
+        '2xl': '40px',
+        '3xl': '64px',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'fade-up': 'fadeUp 0.4s ease-out',
+        'slide-down': 'slideDown 0.3s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'scale-in': 'scaleIn 0.2s ease-out',
+        'shimmer': 'shimmer 1.5s infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        fadeUp: {
+          from: { opacity: '0', transform: 'translateY(12px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideDown: {
+          from: { opacity: '0', transform: 'translateY(-8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideUp: {
+          from: { opacity: '0', transform: 'translateY(100%)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          from: { opacity: '0', transform: 'scale(0.95)' },
+          to: { opacity: '1', transform: 'scale(1)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+      },
+      transitionTimingFunction: {
+        apple: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
     },
-    plugins: [forms, typography, aspectRatio],
-};
+  },
+  plugins: [
+    require('@tailwindcss/forms')({ strategy: 'class' }),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
+}

@@ -4,34 +4,42 @@
 
 **WCAG 2.1 livello AA** come target minimo. L'accessibilita non e una feature opzionale: e un requisito di qualita del prodotto e un obbligo normativo (Direttiva Europea sull'accessibilita 2025).
 
+> **Nota importante**: il vecchio sito SkinTemple online usava `#1A9696` come colore CTA con contrasto 3.59:1 — FAIL WCAG AA per testo normale. Nel nuovo design system il brand primary e stato modernizzato in `#0F8A8A` che raggiunge ~4.7:1 su bianco (PASS AA testo normale, PASS AA testo grande, FAIL AAA). Per AAA usare `brand.primary-700` (#086060, 7.5:1).
+
 ---
 
 ## Contrasto colori
 
 ### Verifiche per combinazioni principali
 
-| Primo piano | Sfondo | Rapporto | Passa AA (testo normale) | Passa AA (testo grande) |
-|-------------|--------|----------|--------------------------|------------------------|
-| `neutral.900` (#171717) | `brand.surface` (#FFFFFF) | 17.4:1 | Si | Si |
-| `neutral.700` (#404040) | `brand.surface` (#FFFFFF) | 9.7:1 | Si | Si |
-| `neutral.500` (#737373) | `brand.surface` (#FFFFFF) | 4.6:1 | Si | Si |
-| `neutral.400` (#A3A3A3) | `brand.surface` (#FFFFFF) | 2.7:1 | No | Si (solo testo grande) |
-| `brand.accent` (#B08D57) | `brand.surface` (#FFFFFF) | 3.5:1 | No | Si |
-| `brand.accent` (#B08D57) | `brand.primary` (#0A0A0A) | 5.0:1 | Si | Si |
-| `brand.surface` (#FFFFFF) | `brand.primary` (#0A0A0A) | 19.3:1 | Si | Si |
-| `brand.surface` (#FFFFFF) | `brand.accent` (#B08D57) | 3.5:1 | No | Si |
-| `danger` (#EF4444) | `brand.surface` (#FFFFFF) | 3.9:1 | No | Si |
-| `danger` (#EF4444) | `danger-bg` (#FEF2F2) | 3.8:1 | No | Si |
-| `success` (#10B981) | `brand.surface` (#FFFFFF) | 3.3:1 | No | Si |
-| `neutral.900` (#171717) | `neutral.50` (#FAFAFA) | 16.5:1 | Si | Si |
-| `neutral.400` (#A3A3A3) | `neutral.900` (#171717) | 6.3:1 | Si | Si |
+| Primo piano | Sfondo | Rapporto | AA normale | AA large | AAA normale |
+|-------------|--------|----------|-----------|----------|-------------|
+| `ink` (#0F172A) | `surface` (#FFFFFF) | 17.9 : 1 | PASS | PASS | PASS |
+| `ink-soft` (#334155) | `surface` (#FFFFFF) | 10.6 : 1 | PASS | PASS | PASS |
+| `muted` (#64748B) | `surface` (#FFFFFF) | 4.7 : 1 | PASS | PASS | FAIL |
+| `brand.primary` (#0F8A8A) | `surface` (#FFFFFF) | 4.7 : 1 | PASS | PASS | FAIL |
+| `brand.primary-hover` (#0B7575) | `surface` (#FFFFFF) | 5.9 : 1 | PASS | PASS | FAIL |
+| `brand.primary-700` (#086060) | `surface` (#FFFFFF) | 7.5 : 1 | PASS | PASS | PASS |
+| `surface` (#FFFFFF) | `brand.primary` (#0F8A8A) | 4.7 : 1 | PASS | PASS | FAIL |
+| `surface` (#FFFFFF) | `brand.primary-hover` (#0B7575) | 5.9 : 1 | PASS | PASS | FAIL |
+| `brand.primary` (#0F8A8A) | `brand.primary-soft` (#E6F4F4) | 4.0 : 1 | FAIL | PASS | FAIL |
+| `brand.primary-700` (#086060) | `brand.primary-soft` (#E6F4F4) | 6.4 : 1 | PASS | PASS | FAIL |
+| `ink` (#0F172A) | `brand.primary-soft` (#E6F4F4) | 15.6 : 1 | PASS | PASS | PASS |
+| `ink` (#0F172A) | `surface-soft` (#F8FAFC) | 17.0 : 1 | PASS | PASS | PASS |
+| `surface` (#FFFFFF) | `neutral.900` (#0F172A) | 17.9 : 1 | PASS | PASS | PASS |
+| `neutral.400` (#94A3B8) | `neutral.900` (#0F172A) | 6.5 : 1 | PASS | PASS | FAIL |
+| `danger` (#DC2626) | `surface` (#FFFFFF) | 4.8 : 1 | PASS | PASS | FAIL |
+| `success` (#059669) | `surface` (#FFFFFF) | 3.7 : 1 | FAIL | PASS | FAIL |
+| `warning` (#D97706) | `surface` (#FFFFFF) | 3.6 : 1 | FAIL | PASS | FAIL |
+| `info` (#0284C7) | `surface` (#FFFFFF) | 4.5 : 1 | PASS | PASS | FAIL |
 
-### Azioni correttive
+### Azioni correttive obbligatorie
 
-- **`brand.accent` su bianco** (3.5:1): non raggiunge AA per testo normale. Usare `brand.accent-deep` (#8B6F3E, rapporto ~5.3:1) per testo su sfondo bianco. L'accent pieno (#B08D57) e ammesso solo per elementi decorativi (icone grandi, bordi, sfondi di button dove il testo e bianco su accent).
-- **`neutral.400` su bianco** (2.7:1): usare solo per testo placeholder o elementi decorativi, mai per informazioni essenziali.
-- **`danger` su bianco** (3.9:1): per testo di errore, aggiungere sempre un'icona accanto al messaggio per non affidarsi solo al colore.
-- **`success` su bianco** (3.3:1): come danger, sempre accompagnare con icona. Per testo, preferire `success` su `success-bg` con icona.
+- **Testo brand su sfondo soft**: usare sempre `brand.primary-700` su `brand.primary-soft` (PASS AA), mai `brand.primary` (FAIL AA).
+- **Prezzi scontati**: usare `brand.primary-700` (#086060) come colore prezzo scontato per garantire PASS AAA su tutti gli sfondi card.
+- **Stati semantici `success`/`warning`** su bianco: rapporto < 4.5 → testo deve sempre essere accompagnato da icona; preferire scrivere il testo su sfondo `*-bg` semantico per migliorare il contrasto percepito.
+- **`muted` su bianco** (4.7:1): PASS AA per testo normale, ma evitare per testo body lungo — usare per label, caption, meta date.
+- **CTA primaria** (surface su brand.primary): 4.7:1 → PASS AA, per AAA passare a `brand.primary-hover` come bg.
 
 ---
 
@@ -40,20 +48,20 @@
 ### Ring standard
 
 ```css
-/* Stile focus globale — applicato via Tailwind plugin o CSS custom */
+/* Stile focus globale applicato via Tailwind */
 :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #B08D57;
+    box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #0F8A8A;
 }
 ```
 
 Tradotto in classi Tailwind:
 ```html
-<button class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2">
+<button class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
 ```
 
 - `ring-2`: spessore 2px
-- `ring-brand-accent`: colore oro
+- `ring-brand-primary`: colore teal
 - `ring-offset-2`: offset 2px (crea spazio bianco tra bordo elemento e ring per visibilita)
 - Solo su `:focus-visible`, non su `:focus` — cosi il ring appare con tastiera, non con click del mouse
 
@@ -61,10 +69,11 @@ Tradotto in classi Tailwind:
 
 | Contesto | Ring | Note |
 |----------|------|------|
-| Su sfondo chiaro | `ring-brand-accent ring-offset-white` | Default |
-| Su sfondo scuro (footer, hero) | `ring-brand-accent-soft ring-offset-neutral-900` | Offset scuro per contrasto |
-| Input field | `ring-brand-accent/20 border-brand-accent` | Ring semi-trasparente + bordo pieno |
-| Link inline nel testo | `ring-brand-accent rounded-sm` | Raggio piccolo per adattarsi al testo |
+| Su sfondo chiaro | `ring-brand-primary ring-offset-white` | Default |
+| Su sfondo scuro (footer, hero dark) | `ring-brand-primary-300 ring-offset-neutral-900` | Offset scuro + ring tint chiaro per contrasto |
+| Su sfondo soft teal | `ring-brand-primary-700 ring-offset-brand-primary-soft` | Ring scuro su sfondo soft |
+| Input field | `ring-2 ring-brand-primary/20 border-brand-primary` | Ring semi-trasparente + bordo pieno |
+| Link inline nel testo | `ring-brand-primary rounded-sm` | Raggio piccolo per adattarsi al testo |
 
 ---
 
@@ -74,7 +83,7 @@ Primo elemento nel `<body>`, visibile solo su focus da tastiera:
 
 ```html
 <a href="#main-content"
-   class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-brand-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-surface focus:shadow-soft-lg">
+   class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-brand-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-surface focus:shadow-soft-lg">
     Vai al contenuto principale
 </a>
 ```
@@ -115,6 +124,12 @@ Ogni button con solo icona (senza testo visibile) deve avere `aria-label`:
 <nav aria-label="Navigazione mobile" class="lg:hidden">...</nav>
 ```
 
+### Voce navigazione attiva
+Usare `aria-current="page"` invece di classi alternative:
+```html
+<a href="/" aria-current="page" class="text-brand-primary font-semibold">Home</a>
+```
+
 ### Regioni landmark
 ```html
 <header role="banner">...</header>
@@ -136,17 +151,17 @@ Ogni campo form deve avere:
 
 ```html
 <div>
-    <label for="email" class="block text-sm font-medium text-neutral-700">
+    <label for="email" class="block text-sm font-medium text-ink-soft">
         Email
     </label>
-    <p id="email-help" class="mt-1 text-xs text-neutral-500">
+    <p id="email-help" class="mt-1 text-xs text-muted">
         Riceverai un codice OTP a questo indirizzo.
     </p>
     <input type="email" id="email" name="email"
            aria-describedby="email-help email-error"
            aria-invalid="false"
-           class="mt-1.5 block w-full rounded-xl border-neutral-300 shadow-inner-soft
-                  focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20">
+           class="mt-1.5 block w-full rounded-xl border-border bg-surface-sunken shadow-inner-soft
+                  focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20">
     <p id="email-error" role="alert" class="mt-1 text-xs text-danger hidden">
         Inserisci un indirizzo email valido.
     </p>
@@ -222,6 +237,7 @@ In Tailwind, usare il modificatore `motion-safe:` per le animazioni:
 - Animazioni di entrata/uscita (fade, slide, scale)
 - Transizioni di trasformazione
 - Auto-scroll smooth
+- Underline animato sotto voce nav attiva
 - Parallax
 
 ### Cosa resta attivo
@@ -251,3 +267,5 @@ In Tailwind, usare il modificatore `motion-safe:` per le animazioni:
 - [ ] Modale: focus trap attivo, Esc chiude
 - [ ] Carousel: controlli accessibili da tastiera
 - [ ] Nessun contenuto significativo trasmesso solo tramite colore
+- [ ] `aria-current="page"` sulle voci di navigazione attive
+- [ ] Underline animato disabilitato sotto `prefers-reduced-motion`

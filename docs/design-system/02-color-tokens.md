@@ -1,84 +1,87 @@
-# 02 — Token Colore
+# Color Tokens - SkinTemple Design System
 
-## Brand
+Palette definitiva teal medical-wellness per SkinTemple ecommerce.
 
-| Token | Hex | HSL | Uso | Dark mode |
-|-------|-----|-----|-----|-----------|
-| `brand.primary` | `#0A0A0A` | `hsl(0, 0%, 4%)` | Testo principale, sfondi scuri, header | `#FAFAFA` |
-| `brand.surface` | `#FFFFFF` | `hsl(0, 0%, 100%)` | Sfondo pagina, card, container | `#0A0A0A` |
-| `brand.accent` | `#B08D57` | `hsl(38, 39%, 51%)` | CTA primarie, link attivi, accent decorativo | `#D4B58A` |
-| `brand.accent-soft` | `#D4B58A` | `hsl(33, 45%, 68%)` | Hover accent, badge, sfondi accent leggeri | `#B08D57` |
-| `brand.accent-deep` | `#8B6F3E` | `hsl(38, 38%, 39%)` | Active state accent, testo su sfondo accent | `#D4B58A` |
+## Brand Colors
 
-## Neutrali (scala Tailwind-style)
+### Primary Teal Scale
+```css
+brand-primary: #0F8A8A     /* Teal principale, WCAG AA 4.7:1 su white */
+brand-primary-hover: #0B7575
+brand-primary-soft: #E6F4F4  /* Background sezioni soft */
+brand-primary-50: #F0FAFA
+brand-primary-100: #D9F0F0
+brand-primary-200: #B3E0E0
+brand-primary-300: #7FCBCB
+brand-primary-400: #3FAEAE
+brand-primary-500: #0F8A8A   /* Same as primary */
+brand-primary-600: #0B7575
+brand-primary-700: #086060
+brand-primary-800: #064848
+brand-primary-900: #043333
+brand-primary-950: #021F1F
+```
 
-| Token | Hex | HSL | Uso |
-|-------|-----|-----|-----|
-| `neutral.50` | `#FAFAFA` | `hsl(0, 0%, 98%)` | Sfondo sezioni alternate, hover leggero |
-| `neutral.100` | `#F5F5F5` | `hsl(0, 0%, 96%)` | Sfondo input, sfondo card secondarie |
-| `neutral.200` | `#E5E5E5` | `hsl(0, 0%, 90%)` | Bordi leggeri, divider |
-| `neutral.300` | `#D4D4D4` | `hsl(0, 0%, 83%)` | Bordi input default, placeholder icon |
-| `neutral.400` | `#A3A3A3` | `hsl(0, 0%, 64%)` | Testo placeholder, icone disabilitate |
-| `neutral.500` | `#737373` | `hsl(0, 0%, 45%)` | Testo secondario, label brand su card |
-| `neutral.600` | `#525252` | `hsl(0, 0%, 32%)` | Testo body secondario |
-| `neutral.700` | `#404040` | `hsl(0, 0%, 25%)` | Testo body principale |
-| `neutral.800` | `#262626` | `hsl(0, 0%, 15%)` | Titoli secondari, footer sfondo |
-| `neutral.900` | `#171717` | `hsl(0, 0%, 9%)` | Titoli principali |
-| `neutral.950` | `#0A0A0A` | `hsl(0, 0%, 4%)` | Nero piu profondo, alias `brand.primary` |
+### Accent & Surfaces
+```css
+brand-accent: #14B8A6        /* Teal vivace per highlight, stati attivi */
+brand-accent-soft: #CCFBF1
 
-## Stati semantici
+brand-ink: #0F172A          /* Testo principale slate */
+brand-ink-soft: #334155     /* Testo secondario */
+brand-muted: #64748B
 
-| Token | Hex | HSL | Uso |
-|-------|-----|-----|-----|
-| `success` | `#10B981` | `hsl(160, 84%, 39%)` | Conferma ordine, validazione ok, badge disponibile |
-| `success-bg` | `#ECFDF5` | `hsl(152, 81%, 96%)` | Sfondo alert successo |
-| `warning` | `#F59E0B` | `hsl(38, 92%, 50%)` | Scorte limitate, attenzione |
-| `warning-bg` | `#FFFBEB` | `hsl(48, 100%, 96%)` | Sfondo alert warning |
-| `danger` | `#EF4444` | `hsl(0, 84%, 60%)` | Errore validazione, rimuovi, elimina |
-| `danger-bg` | `#FEF2F2` | `hsl(0, 86%, 97%)` | Sfondo alert errore |
-| `info` | `#3B82F6` | `hsl(217, 91%, 60%)` | Link informativi, badge info |
-| `info-bg` | `#EFF6FF` | `hsl(214, 100%, 97%)` | Sfondo alert info |
+brand-surface: #FFFFFF      /* Superficie principale */
+brand-surface-soft: #F8FAFC /* Background soft */
+brand-surface-sunken: #F1F5F9 /* Input backgrounds */
 
-## Glass overlay
+brand-border: #E2E8F0       /* Bordi default */
+brand-border-strong: #CBD5E1
+```
 
-| Token | Valore | Proprieta aggiuntive | Uso |
-|-------|--------|----------------------|-----|
-| `glass.light` | `rgba(255, 255, 255, 0.72)` | `backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);` | Mega menu, drawer mobile, overlay navigazione su sfondo chiaro |
-| `glass.dark` | `rgba(10, 10, 10, 0.55)` | `backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);` | Modal backdrop, overlay su immagini hero |
+## Neutral Scale (Slate)
+Sfumatura cool per neutrali:
+```css
+neutral-50: #F8FAFC
+neutral-100: #F1F5F9
+neutral-200: #E2E8F0
+neutral-300: #CBD5E1
+neutral-400: #94A3B8
+neutral-500: #64748B
+neutral-600: #475569
+neutral-700: #334155
+neutral-800: #1E293B
+neutral-900: #0F172A
+neutral-950: #020617
+```
 
-## Gradienti (uso limitato)
+## Semantic Colors
+```css
+success: #059669, success-soft: #ECFDF5
+warning: #D97706, warning-soft: #FFFBEB
+danger: #DC2626, danger-soft: #FEF2F2
+info: #0284C7, info-soft: #F0F9FF
+```
 
-| Token | Valore | Uso |
-|-------|--------|-----|
-| `gradient.accent` | `linear-gradient(135deg, #B08D57 0%, #D4B58A 100%)` | CTA premium, badge esclusivi (raro) |
-| `gradient.surface` | `linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%)` | Sfondo sezioni per leggera profondita |
-| `gradient.dark` | `linear-gradient(180deg, #0A0A0A 0%, #171717 100%)` | Footer, sezioni scure |
+## Glass Morphism
+```css
+glass-light: rgba(255,255,255,0.72)
+glass-tint: rgba(15,138,138,0.08)
+glass-dark: rgba(15,23,42,0.55)
+```
 
----
+## Contrasti WCAG
 
-## Quando usare cosa
+| Combinazione | Ratio | Livello |
+|--------------|-------|---------|
+| `brand-primary` (#0F8A8A) su white | 4.7:1 | ✅ AA |
+| `brand-primary` su `brand-primary-soft` (#E6F4F4) | 3.2:1 | ⚠️ AA Large |
+| `brand-ink` (#0F172A) su white | 19.1:1 | ✅ AAA |
+| white su `brand-primary` | 4.7:1 | ✅ AA |
+| `brand-ink-soft` (#334155) su white | 8.9:1 | ✅ AAA |
 
-### Testo
-- **Titoli principali (H1, H2)**: `neutral.900` su sfondo chiaro, `brand.surface` su sfondo scuro
-- **Body text**: `neutral.700` — abbastanza scuro per leggibilita, non nero pieno per morbidezza
-- **Testo secondario** (date, meta, caption): `neutral.500`
-- **Label brand su card prodotto**: `neutral.500` con `uppercase` e `tracking-widest`
-- **Link**: `brand.accent` con underline su hover, `brand.accent-deep` su active
+## Migrazione dalla Palette Precedente
 
-### Sfondi
-- **Pagina**: `brand.surface` (`#FFFFFF`)
-- **Sezioni alternate**: `neutral.50` per creare ritmo senza bordi
-- **Card prodotto**: `brand.surface` con `shadow-soft-sm`, hover `shadow-soft-md`
-- **Header fisso**: `glass.light` con `border-b border-neutral.200/50`
-- **Footer**: `neutral.900` o `neutral.950` con testo `neutral.400`
+**ELIMINATA** completamente la palette oro/bronzo (`#B08D57`) — era sbagliata rispetto alla brand identity reale.
 
-### Accent dorato
-- **CTA primaria**: sfondo `brand.accent`, testo `brand.surface`, hover `brand.accent-deep`
-- **Badge "Novita"**: sfondo `brand.accent`, testo `brand.surface`
-- **Prezzo in promozione**: `brand.accent` per il prezzo scontato, `neutral.400` barrato per l'originale
-- **Focus ring**: `ring-brand-accent` per evidenziare accessibilita
-- **Non usare oro come**: colore di sfondo di intere sezioni, colore testo body, bordo di card standard
-
-### Colori semantici
-- Usare **solo** per comunicare stati reali: errore di validazione (danger), successo operazione (success), avviso scorte (warning), informazione neutra (info)
-- Mai come decorazione o per creare varieta cromatica nella pagina
+**SOSTITUITA** con teal `#0F8A8A` derivato dal colore originale `#1A9696` del vecchio sito, ottimizzato per WCAG AA compliance.

@@ -1,5 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html { @apply font-sans text-brand-ink antialiased; }
+  body { @apply bg-brand-surface; }
+  h1, h2 { @apply font-display; }
+  :focus-visible { @apply outline-none ring-2 ring-brand-primary ring-offset-2; }
+}
+
+@layer components {
+  /* Glass morphism utility */
+  .glass-light {
+    @apply bg-white/[0.72] backdrop-blur-md border border-white/40;
+  }
+  .glass-tint {
+    background: rgba(15, 138, 138, 0.08);
+    @apply backdrop-blur-sm border border-brand-primary/10;
+  }
+
+  /* Pill buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-9 py-3.5 bg-brand-primary text-white
+           font-medium text-sm tracking-wide uppercase rounded-full
+           hover:bg-brand-primary-hover active:scale-[0.98]
+           transition-all duration-200 ease-apple focus-visible:ring-2 focus-visible:ring-brand-primary;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-9 py-3.5
+           border border-brand-primary text-brand-primary bg-transparent font-medium text-sm
+           tracking-wide uppercase rounded-full
+           hover:bg-brand-primary-soft active:scale-[0.98]
+           transition-all duration-200 ease-apple;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5
+           text-brand-ink-soft font-medium text-sm rounded-xl
+           hover:bg-brand-surface-soft active:scale-[0.98]
+           transition-all duration-200 ease-apple;
+  }
+
+  /* Link teal stile vecchio sito */
+  .link-teal {
+    @apply text-brand-primary font-medium hover:text-brand-primary-hover
+           underline-offset-2 hover:underline transition-colors duration-150;
+  }
+
+  /* Form inputs */
+  .input-base {
+    @apply w-full px-4 py-3 bg-brand-surface-sunken border border-brand-border rounded-xl
+           text-brand-ink placeholder:text-brand-muted text-sm
+           focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary
+           transition-all duration-200;
+  }
+
+  /* Product card */
+  .product-card {
+    @apply bg-white rounded-2xl shadow-soft-md overflow-hidden
+           hover:shadow-soft-lg hover:-translate-y-0.5
+           transition-all duration-300 ease-apple cursor-pointer;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply bg-gradient-to-r from-neutral-100 via-neutral-50 to-neutral-100
+           bg-[length:200%_100%] animate-shimmer rounded-lg;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}

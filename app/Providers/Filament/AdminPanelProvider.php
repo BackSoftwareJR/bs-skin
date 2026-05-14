@@ -7,6 +7,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -27,19 +28,25 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('SkinTemple Admin')
-            ->brandLogo(fn () => view('components.brand-logo'))
-            ->brandLogoHeight('2rem')
-            ->favicon(asset('img/brand/favicon.ico'))
+            ->brandName('SkinTemple')
+            ->favicon(asset('favicon.ico'))
             ->colors([
-                'primary' => Color::hex('#0F172A'),
-                'gray' => Color::Slate,
+                'primary' => Color::hex('#0F8A8A'),
             ])
             ->font('Inter')
             ->globalSearch(true)
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->sidebarCollapsibleOnDesktop()
-            ->darkMode()
+            ->darkMode(false)
             ->databaseNotifications()
+            ->navigationGroups([
+                NavigationGroup::make('E-commerce')->icon('heroicon-o-shopping-bag')->collapsible(false),
+                NavigationGroup::make('Catalogo')->icon('heroicon-o-squares-2x2')->collapsible(false),
+                NavigationGroup::make('Contenuti')->icon('heroicon-o-document-text')->collapsible(false),
+                NavigationGroup::make('Marketing')->icon('heroicon-o-megaphone')->collapsible(false),
+                NavigationGroup::make('Impostazioni')->icon('heroicon-o-cog-6-tooth')->collapsible(true),
+                NavigationGroup::make('Sistema')->icon('heroicon-o-server')->collapsible(true),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

@@ -1269,10 +1269,10 @@ INSERT IGNORE INTO `settings` (`group`, `name`, `payload`, `created_at`, `update
   ('commerce', 'invoice_number_prefix',    '"FT-"',                NOW(), NOW()),
   ('commerce', 'invoice_number_year_reset','true',                 NOW(), NOW());
 
--- ===== 13.10: SETTINGS — SEO =====
+-- ===== 13.10: SETTINGS — SEO (AGGIORNATO) =====
 INSERT IGNORE INTO `settings` (`group`, `name`, `payload`, `created_at`, `updated_at`) VALUES
-  ('seo', 'default_meta_title',       '"SkinTemple — Tecnologie Made in Italy"',                                                                                                  NOW(), NOW()),
-  ('seo', 'default_meta_description', '"Soluzioni 100% Made in Italy per centri estetici e studi medici. Tecnologie multifunzione, assistenza dedicata, qualità italiana."',       NOW(), NOW()),
+  ('seo', 'default_meta_title',       '"SkinTemple — Tecnologie e Prodotti Made in Italy per Centri Estetici"',                                                                                                  NOW(), NOW()),
+  ('seo', 'default_meta_description', '"Tecnologie multifunzione e prodotti per la cura della pelle selezionati con rigore. 100% Made in Italy. Qualità, ingredienti ed efficacia per professionisti dell''estetica."',       NOW(), NOW()),
   ('seo', 'default_og_image_path',    '""',              NOW(), NOW()),
   ('seo', 'google_site_verification', '""',              NOW(), NOW()),
   ('seo', 'robots',                   '"index,follow"',  NOW(), NOW()),
@@ -1292,31 +1292,124 @@ INSERT IGNORE INTO `settings` (`group`, `name`, `payload`, `created_at`, `update
   ('features', 'einvoice_badge_visible',  'true',   NOW(), NOW()),
   ('features', 'einvoice_badge_label',    '"Fatturazione elettronica disponibile su richiesta"', NOW(), NOW());
 
--- ===== 13.12: CATEGORIE (MACROAREE + MICROAREE) =====
+-- ===== 13.12: CATEGORIE REALI (MACROAREE + MICROAREE) =====
 
--- Macroaree
-INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `description`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
-  (1, NULL, '{"it":"Tecnologie"}',  'tecnologie', '{"it":"Tecnologie multifunzione Made in Italy per centri estetici e studi medici"}', 'macroarea', 1, 1, NOW(), NOW()),
-  (2, NULL, '{"it":"Cosmetici"}',   'cosmetici',  '{"it":"Cosmetici skincare Made in Italy per la cura della pelle"}',                  'macroarea', 1, 2, NOW(), NOW()),
-  (3, NULL, '{"it":"Accessori"}',   'accessori',  '{"it":"Accessori professionali per trattamenti estetici"}',                          'macroarea', 1, 3, NOW(), NOW());
+-- Macroaree reali dal vecchio sito SkinTemple
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, NULL, '{"it":"Corpo"}', 'corpo', 'macroarea', 1, 10, NOW(), NOW()),
+(2, NULL, '{"it":"Pelle"}', 'pelle', 'macroarea', 1, 20, NOW(), NOW()),
+(3, NULL, '{"it":"Viso e Corpo"}', 'viso-e-corpo', 'macroarea', 1, 30, NOW(), NOW()),
+(4, NULL, '{"it":"Monouso"}', 'monouso', 'macroarea', 1, 40, NOW(), NOW()),
+(5, NULL, '{"it":"Tecnologie"}', 'tecnologie', 'macroarea', 1, 50, NOW(), NOW()),
+(6, NULL, '{"it":"Epilazione"}', 'epilazione', 'macroarea', 1, 60, NOW(), NOW());
 
--- Microaree Tecnologie
-INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `description`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
-  (4, 1, '{"it":"Viso"}',          'tecnologie-viso',          NULL, 'microarea', 1, 1, NOW(), NOW()),
-  (5, 1, '{"it":"Corpo"}',         'tecnologie-corpo',         NULL, 'microarea', 1, 2, NOW(), NOW()),
-  (6, 1, '{"it":"Multifunzione"}', 'tecnologie-multifunzione', NULL, 'microarea', 1, 3, NOW(), NOW());
+-- Microaree Monouso
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(10, 4, '{"it":"Lenzuolini e Rotoli"}', 'lenzuolini-e-rotoli', 'microarea', 1, 10, NOW(), NOW()),
+(11, 4, '{"it":"Abbigliamento Monouso"}', 'abbigliamento-monouso', 'microarea', 1, 20, NOW(), NOW()),
+(12, 4, '{"it":"Veline e Salviette"}', 'veline-e-salviette', 'microarea', 1, 30, NOW(), NOW()),
+(13, 4, '{"it":"Dischetti e Cotone"}', 'dischetti-e-cotone', 'microarea', 1, 40, NOW(), NOW()),
+(14, 4, '{"it":"Calzature Monouso"}', 'calzature-monouso', 'microarea', 1, 50, NOW(), NOW()),
+(15, 4, '{"it":"Fasce e Protezioni"}', 'fasce-e-protezioni', 'microarea', 1, 60, NOW(), NOW());
 
--- Microaree Cosmetici
-INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `description`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
-  (7,  2, '{"it":"Detergenti"}',  'cosmetici-detergenti',  NULL, 'microarea', 1, 1, NOW(), NOW()),
-  (8,  2, '{"it":"Sieri"}',       'cosmetici-sieri',       NULL, 'microarea', 1, 2, NOW(), NOW()),
-  (9,  2, '{"it":"Creme viso"}',  'cosmetici-creme-viso',  NULL, 'microarea', 1, 3, NOW(), NOW()),
-  (10, 2, '{"it":"Creme corpo"}', 'cosmetici-creme-corpo', NULL, 'microarea', 1, 4, NOW(), NOW()),
-  (11, 2, '{"it":"Maschere"}',    'cosmetici-maschere',    NULL, 'microarea', 1, 5, NOW(), NOW());
+-- Microaree Tecnologie (dispositivi)
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(20, 5, '{"it":"Pressoterapia"}', 'pressoterapia', 'microarea', 1, 10, NOW(), NOW()),
+(21, 5, '{"it":"Laser e Luce Pulsata"}', 'laser-e-luce-pulsata', 'microarea', 1, 20, NOW(), NOW()),
+(22, 5, '{"it":"Endermologia e Vacuum"}', 'endermologia-e-vacuum', 'microarea', 1, 30, NOW(), NOW()),
+(23, 5, '{"it":"Radiofrequenza"}', 'radiofrequenza', 'microarea', 1, 40, NOW(), NOW()),
+(24, 5, '{"it":"Multifunzione"}', 'multifunzione', 'microarea', 1, 50, NOW(), NOW()),
+(25, 5, '{"it":"Accessori Dispositivi"}', 'accessori-dispositivi', 'microarea', 1, 60, NOW(), NOW());
+
+-- Microaree Corpo
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(30, 1, '{"it":"Trattamenti Corpo"}', 'trattamenti-corpo', 'microarea', 1, 10, NOW(), NOW()),
+(31, 1, '{"it":"Massaggio"}', 'massaggio', 'microarea', 1, 20, NOW(), NOW()),
+(32, 1, '{"it":"Snellimento"}', 'snellimento', 'microarea', 1, 30, NOW(), NOW());
+
+-- Microaree Pelle (cosmetici)
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(40, 2, '{"it":"Detergenti Viso"}', 'detergenti-viso', 'microarea', 1, 10, NOW(), NOW()),
+(41, 2, '{"it":"Sieri e Concentrati"}', 'sieri-e-concentrati', 'microarea', 1, 20, NOW(), NOW()),
+(42, 2, '{"it":"Creme e Emulsioni"}', 'creme-e-emulsioni', 'microarea', 1, 30, NOW(), NOW()),
+(43, 2, '{"it":"Maschere"}', 'maschere', 'microarea', 1, 40, NOW(), NOW()),
+(44, 2, '{"it":"Contorno Occhi"}', 'contorno-occhi', 'microarea', 1, 50, NOW(), NOW()),
+(45, 2, '{"it":"Solari e Protezioni"}', 'solari-e-protezioni', 'microarea', 1, 60, NOW(), NOW());
+
+-- Microaree Epilazione
+INSERT IGNORE INTO `categories` (`id`, `parent_id`, `name`, `slug`, `type`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(50, 6, '{"it":"Cere e Strisce"}', 'cere-e-strisce', 'microarea', 1, 10, NOW(), NOW()),
+(51, 6, '{"it":"Accessori Epilazione"}', 'accessori-epilazione', 'microarea', 1, 20, NOW(), NOW());
 
 -- ===== 13.13: BRAND =====
 INSERT IGNORE INTO `brands` (`id`, `name`, `slug`, `description`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
   (1, '{"it":"SkinTemple"}', 'skintemple', '{"it":"Tecnologie e cosmetici Made in Italy per professionisti del settore estetico"}', 1, 1, NOW(), NOW());
+
+-- ===== 13.13.1: ATTRIBUTI PRODOTTO REALI =====
+INSERT IGNORE INTO `attributes` (`id`, `code`, `name`, `type`, `is_filterable`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 'formato_confezione', '{"it":"Formato Confezione"}', 'select', 1, 10, NOW(), NOW()),
+(2, 'materiale', '{"it":"Materiale"}', 'select', 1, 20, NOW(), NOW()),
+(3, 'dimensioni', '{"it":"Dimensioni"}', 'text', 0, 30, NOW(), NOW()),
+(4, 'grammatura', '{"it":"Grammatura"}', 'select', 1, 40, NOW(), NOW()),
+(5, 'colore', '{"it":"Colore"}', 'color', 1, 50, NOW(), NOW()),
+(6, 'modalita_acquisto', '{"it":"Modalità di Acquisto"}', 'select', 1, 60, NOW(), NOW());
+
+INSERT IGNORE INTO `attribute_values` (`attribute_id`, `value`, `slug`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, '{"it":"25 pezzi"}', '25-pezzi', 10, NOW(), NOW()),
+(1, '{"it":"50 pezzi"}', '50-pezzi', 20, NOW(), NOW()),
+(1, '{"it":"100 pezzi"}', '100-pezzi', 30, NOW(), NOW()),
+(1, '{"it":"200 pezzi"}', '200-pezzi', 40, NOW(), NOW()),
+(2, '{"it":"TNT"}', 'tnt', 10, NOW(), NOW()),
+(2, '{"it":"Cartene"}', 'cartene', 20, NOW(), NOW()),
+(2, '{"it":"Cotone"}', 'cotone', 30, NOW(), NOW()),
+(2, '{"it":"Microfibra"}', 'microfibra', 40, NOW(), NOW()),
+(4, '{"it":"20-22 gr/mq"}', '20-22-gr', 10, NOW(), NOW()),
+(4, '{"it":"25-28 gr/mq"}', '25-28-gr', 20, NOW(), NOW()),
+(4, '{"it":"30-35 gr/mq"}', '30-35-gr', 30, NOW(), NOW()),
+(6, '{"it":"Acquisto"}', 'acquisto', 10, NOW(), NOW()),
+(6, '{"it":"Noleggio mensile"}', 'noleggio-mensile', 20, NOW(), NOW()),
+(6, '{"it":"Noleggio giornaliero"}', 'noleggio-giornaliero', 30, NOW(), NOW());
+
+-- ===== 13.13.2: PRODOTTI DEMO REALI =====
+
+-- Prodotto 1: PRESS FLOW (pressoterapia)
+INSERT IGNORE INTO `products` (id, sku, name, slug, product_type, status, price, brand_id, is_featured, is_new, badge_label, 
+  technical_specs_json, warranty_months, is_rentable, rental_monthly_price, published_at, created_at, updated_at) VALUES
+(1, 'PRESSFLOW-01', '{"it":"Press Flow — Pressoterapia Professionale"}', 'press-flow', 
+  'device', 'published', 1890.00, 1, 1, 0, 'Best Seller',
+  '{"it":{"Tecnologia":"Pressoterapia sequenziale","Camere":"8 camere indipendenti","Programmi":"12 programmi preimpostati","Display":"Touch screen LCD","Connessione":"App dedicata","Certificazione":"CE Medical"}}',
+  24, 1, 149.00, NOW(), NOW(), NOW());
+
+-- Categoria association Press Flow
+INSERT IGNORE INTO `category_product` (category_id, product_id, sort_order, is_primary) VALUES (5, 1, 10, 1), (20, 1, 10, 0);
+
+-- Inventory per Press Flow (nessuna variante, stock singolo)
+INSERT IGNORE INTO `product_variants` (id, product_id, sku, name, price_override, is_active, sort_order, created_at, updated_at)
+VALUES (1, 1, 'PRESSFLOW-01-STD', 'Standard', NULL, 1, 1, NOW(), NOW());
+INSERT IGNORE INTO `inventory` (product_variant_id, quantity, threshold_low, allow_backorder, created_at, updated_at)
+VALUES (1, 5, 2, 0, NOW(), NOW());
+
+-- Prodotto 2: Lenzuolino da Massaggio TNT (monouso)
+INSERT IGNORE INTO `products` (id, sku, name, slug, product_type, status, price, brand_id, published_at, created_at, updated_at) VALUES
+(2, 'LENZ100X200TNT', '{"it":"Lenzuolino da Massaggio in TNT 25/28gr — 100x200 cm — Conf. 100 pz"}', 
+  'lenzuolino-massaggio-tnt-100x200', 'cosmetic', 'published', 18.90, 1, NOW(), NOW(), NOW());
+
+INSERT IGNORE INTO `category_product` (category_id, product_id, sort_order, is_primary) VALUES (4, 2, 10, 1), (10, 2, 10, 0);
+INSERT IGNORE INTO `product_variants` (id, product_id, sku, name, is_active, sort_order, created_at, updated_at)
+VALUES (2, 2, 'LENZ100X200TNT-STD', 'Confezione 100 pz', 1, 1, NOW(), NOW());
+INSERT IGNORE INTO `inventory` (product_variant_id, quantity, threshold_low, allow_backorder, created_at, updated_at)
+VALUES (2, 50, 10, 1, NOW(), NOW());
+
+-- Prodotto 3: Pantatuta in Cartene (monouso)  
+INSERT IGNORE INTO `products` (id, sku, name, slug, product_type, status, price, brand_id, published_at, created_at, updated_at) VALUES
+(3, 'TUTACARTENE50', '{"it":"Pantatuta in Cartene — Confezione 50 pz"}',
+  'pantatuta-cartene-50pz', 'cosmetic', 'published', 22.50, 1, NOW(), NOW(), NOW());
+
+INSERT IGNORE INTO `category_product` (category_id, product_id, sort_order, is_primary) VALUES (4, 3, 20, 1), (11, 3, 10, 0);
+INSERT IGNORE INTO `product_variants` (id, product_id, sku, name, is_active, sort_order, created_at, updated_at)
+VALUES (3, 3, 'TUTACARTENE50-STD', 'Confezione 50 pz', 1, 1, NOW(), NOW());
+INSERT IGNORE INTO `inventory` (product_variant_id, quantity, threshold_low, allow_backorder, created_at, updated_at)
+VALUES (3, 30, 5, 1, NOW(), NOW());
 
 -- ===== 13.14: PAGINE CMS CON CONTENUTO REALE =====
 
@@ -1445,15 +1538,15 @@ INSERT IGNORE INTO `menus` (`id`, `code`, `name`, `location`, `is_active`, `crea
   (2, 'footer_nav', 'Footer',                 'footer',  1, NOW(), NOW()),
   (3, 'mobile_nav', 'Navigazione mobile',     'mobile',  1, NOW(), NOW());
 
--- Menu principale (header)
+-- Menu principale aggiornato con categorie reali
 INSERT INTO `menu_items` (`menu_id`, `parent_id`, `label`, `type`, `url`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES
   (1, NULL, '{"it":"Home"}',        'custom', '/',                     1, 1, NOW(), NOW()),
   (1, NULL, '{"it":"Prodotti"}',    'custom', '/shop',                 2, 1, NOW(), NOW()),
   (1, NULL, '{"it":"Tecnologie"}',  'custom', '/categoria/tecnologie', 3, 1, NOW(), NOW()),
-  (1, NULL, '{"it":"Chi Siamo"}',   'custom', '/chi-siamo',            4, 1, NOW(), NOW()),
-  (1, NULL, '{"it":"Supporto"}',    'custom', '/supporto',             5, 1, NOW(), NOW()),
-  (1, NULL, '{"it":"Contatti"}',    'custom', '/contatti',             6, 1, NOW(), NOW()),
-  (1, NULL, '{"it":"Blog"}',        'custom', '/blog',                 7, 1, NOW(), NOW());
+  (1, NULL, '{"it":"Monouso"}',     'custom', '/categoria/monouso',    4, 1, NOW(), NOW()),
+  (1, NULL, '{"it":"Chi Siamo"}',   'custom', '/chi-siamo',            5, 1, NOW(), NOW()),
+  (1, NULL, '{"it":"Supporto"}',    'custom', '/supporto',             6, 1, NOW(), NOW()),
+  (1, NULL, '{"it":"Contatti"}',    'custom', '/contatti',             7, 1, NOW(), NOW());
 
 -- Footer — Sezione "Naviga"
 INSERT INTO `menu_items` (`id`, `menu_id`, `parent_id`, `label`, `type`, `url`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES

@@ -571,3 +571,9 @@ Usa `tokenable_type` + `tokenable_id` per associare token API a qualsiasi model 
 | `inventory ↔ product_variants` | 1:1 | Ogni variante ha esattamente un record inventario |
 | `carts.session_token` | Guest cart | Carrelli guest identificati da token sessione |
 | `coupons.customer_id` | Coupon dedicato | Se non null, il coupon è riservato a quel singolo cliente |
+
+## Note sui Seed Iniziali
+
+**Categorie**: 6 macroaree reali (Corpo, Pelle, Viso e corpo, Monouso, Tecnologie, Epilazione) con relative microaree. Sostituiscono le categorie placeholder.
+
+**Prodotti demo**: 3 prodotti reali dal vecchio sito SkinTemple: Press Flow (device), Lenzuolino TNT e Pantatuta (monouso).

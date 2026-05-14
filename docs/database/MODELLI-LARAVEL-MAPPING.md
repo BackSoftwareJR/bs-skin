@@ -114,6 +114,7 @@ Le tabelle `permissions`, `roles`, `model_has_permissions`, `model_has_roles`, `
   - registerMediaCollections: `cover`, `icon`
 - **Cast**: `is_active` → `boolean`, `type` → `string` (ENUM)
 - **Scope**: `scopeActive($q)`, `scopeMacroaree($q)` → `where('type', 'macroarea')`, `scopeMicroaree($q)`, `scopeRoots($q)` → `whereNull('parent_id')`
+- **Note**: Categorie: 6 macroaree reali (Corpo, Pelle, Viso e corpo, Monouso, Tecnologie, Epilazione) con relative microaree. Products di tipo `device` nelle macroarea Tecnologie, tipo `cosmetic` per Pelle, tipo `cosmetic` per Monouso.
 
 ### `Attribute` → `attributes`
 - **Namespace**: `App\Models\Attribute`

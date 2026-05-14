@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin
+Disallow: /nova-api
+Sitemap: https://prr.skintemple.it/sitemap.xml

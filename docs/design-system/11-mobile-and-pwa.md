@@ -42,11 +42,11 @@ Barra di navigazione fissa in basso, visibile solo su viewport < `lg` (1024px). 
 ### Implementazione
 
 ```html
-<nav class="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-brand-surface/95 backdrop-blur-lg lg:hidden"
+<nav class="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-surface/95 backdrop-blur-lg lg:hidden"
      style="padding-bottom: env(safe-area-inset-bottom)">
     <div class="flex items-center justify-around h-16">
         <a href="/" class="flex flex-col items-center justify-center gap-0.5 min-w-[64px] min-h-[44px]"
-           :class="currentTab === 'home' ? 'text-brand-accent' : 'text-neutral-500'">
+           :class="currentTab === 'home' ? 'text-brand-primary' : 'text-neutral-500'">
             <x-heroicon-o-home class="h-6 w-6" x-show="currentTab !== 'home'" />
             <x-heroicon-s-home class="h-6 w-6" x-show="currentTab === 'home'" />
             <span class="text-2xs font-medium">Home</span>
@@ -58,7 +58,7 @@ Barra di navigazione fissa in basso, visibile solo su viewport < `lg` (1024px). 
             <span class="text-2xs font-medium">Carrello</span>
             <!-- Badge contatore -->
             <span x-show="cartCount > 0" x-text="cartCount"
-                  class="absolute -top-1 right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-accent text-2xs font-semibold text-brand-surface px-1">
+                  class="absolute -top-1 right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-primary text-2xs font-semibold text-surface px-1">
             </span>
         </button>
     </div>
@@ -67,7 +67,7 @@ Barra di navigazione fissa in basso, visibile solo su viewport < `lg` (1024px). 
 
 ### Note tecniche
 - `padding-bottom: env(safe-area-inset-bottom)` per iPhone con notch/barra gesture
-- `bg-brand-surface/95 backdrop-blur-lg` per effetto glass sottile
+- `bg-surface/95 backdrop-blur-lg` per effetto glass sottile
 - Il body della pagina deve avere `pb-20 lg:pb-0` per compensare lo spazio della tab bar
 - Transizione tra stato outline e solid gestita con Alpine.js `x-show`
 
@@ -92,7 +92,7 @@ Su mobile il carrello si apre come **bottom sheet** (dal basso verso l'alto), no
      x-transition:leave="transition ease-apple duration-200"
      x-transition:leave-start="translate-y-0"
      x-transition:leave-end="translate-y-full"
-     class="fixed inset-x-0 bottom-0 z-40 max-h-[85vh] rounded-t-3xl bg-brand-surface shadow-soft-xl overflow-hidden lg:hidden">
+     class="fixed inset-x-0 bottom-0 z-40 max-h-[85vh] rounded-t-3xl bg-surface shadow-soft-xl overflow-hidden lg:hidden">
     <!-- Handle di trascinamento -->
     <div class="flex justify-center py-3">
         <div class="h-1 w-10 rounded-full bg-neutral-300"></div>
@@ -126,7 +126,7 @@ La gallery prodotto su mobile supporta swipe nativo tramite CSS scroll-snap:
 <div class="flex justify-center gap-2 mt-3">
     @foreach($images as $i => $image)
         <span class="h-1.5 w-1.5 rounded-full transition-colors"
-              :class="currentSlide === {{ $i }} ? 'bg-brand-accent' : 'bg-neutral-300'"></span>
+              :class="currentSlide === {{ $i }} ? 'bg-brand-primary' : 'bg-neutral-300'"></span>
     @endforeach
 </div>
 ```
@@ -162,7 +162,7 @@ Attivato dalla voce "Menu" nella bottom tab bar. Copre tutto lo schermo con elen
 └──────────────────────────────────────┘
 ```
 
-- Sfondo: `bg-brand-surface` pieno (no glass qui, serve leggibilita piena)
+- Sfondo: `bg-surface` pieno (no glass qui, serve leggibilita piena)
 - Animazione: fade-in + slide-up leggero
 - Le voci con sottocategorie (Prodotti Viso, Corpo, Tecnologie) aprono un sotto-livello con animazione slide-left
 - Pulsante indietro in alto a sinistra nel sotto-livello

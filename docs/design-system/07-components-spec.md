@@ -36,9 +36,9 @@ Layout principale pubblico. Wrappa tutte le pagine del frontend.
     @livewireStyles
     {{ $head ?? '' }}
 </head>
-<body class="min-h-screen bg-brand-surface font-sans text-neutral-700 antialiased">
+<body class="min-h-screen bg-surface font-sans text-neutral-700 antialiased">
     <a href="#main-content"
-       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-brand-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-surface focus:shadow-soft-lg">
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-brand-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-surface focus:shadow-soft-lg">
         Vai al contenuto principale
     </a>
 
@@ -76,13 +76,13 @@ Barra superiore con messaggio promozionale. Chiudibile. Persiste stato chiusura 
      x-transition:leave="transition ease-apple duration-200"
      x-transition:leave-start="opacity-100 max-h-10"
      x-transition:leave-end="opacity-0 max-h-0"
-     class="relative bg-brand-primary text-brand-surface overflow-hidden">
+     class="relative bg-brand-primary text-surface overflow-hidden">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-center py-2 text-xs sm:text-sm font-medium tracking-wide">
             <span>Spedizione gratuita per ordini superiori a €59</span>
             <button @click="dismissed = true; localStorage.setItem('announcement-dismissed', 'true')"
                     aria-label="Chiudi avviso"
-                    class="absolute right-4 p-1 text-neutral-400 hover:text-brand-surface transition-colors">
+                    class="absolute right-4 p-1 text-neutral-400 hover:text-surface transition-colors">
                 <x-heroicon-o-x-mark class="h-4 w-4" />
             </button>
         </div>
@@ -96,13 +96,15 @@ Barra superiore con messaggio promozionale. Chiudibile. Persiste stato chiusura 
 
 **Path**: `resources/views/components/public/public-header.blade.php`
 
-Header sticky con glass effect. Contiene logo, navigazione desktop, icone azione.
+Header sticky con glass effect. Replica il pattern del vecchio sito: logo a sinistra, nav inline centrata con underline animato sotto la voce attiva, CTA "Contattaci" outline pill + icona search a destra.
 
 **Struttura desktop** (`lg+`):
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  [Logo]     Home  Prodotti▾  Tecnologie  Chi Siamo  Blog   │  🔍  👤  ♡  🛒(2)
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│ [Logo]    Home  Prodotti  Chi Siamo  Tecnologie  Supporto    [Contattaci] 🔍 │
+│           ────                                                            │
+│           underline animato sotto la voce attiva                          │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Struttura mobile** (`< lg`):
@@ -114,51 +116,85 @@ Header sticky con glass effect. Contiene logo, navigazione desktop, icone azione
 
 **Implementazione**:
 ```html
-<header class="sticky top-0 z-50 border-b border-neutral-200/50 bg-brand-surface/90 backdrop-blur-lg"
+<header class="sticky top-0 z-50 border-b border-border/60 bg-glass-light backdrop-blur-lg"
         x-data="{ megaMenuOpen: null }">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between lg:h-20">
             <!-- Logo -->
             <a href="/" class="shrink-0">
-                <img src="/images/logo.svg" alt="SkinTemple" class="h-8 lg:h-10 w-auto">
+                <x-public.brand-logo class="h-9 lg:h-10 w-auto" />
             </a>
 
-            <!-- Nav desktop -->
-            <nav aria-label="Navigazione principale" class="hidden lg:flex lg:items-center lg:gap-8">
-                <a href="/" class="text-sm font-medium text-neutral-700 hover:text-brand-accent transition-colors">Home</a>
-                <div @mouseenter="megaMenuOpen = 'prodotti'" @mouseleave="megaMenuOpen = null" class="relative">
-                    <button class="flex items-center gap-1 text-sm font-medium text-neutral-700 hover:text-brand-accent transition-colors">
-                        Prodotti
-                        <x-heroicon-m-chevron-down class="h-4 w-4" />
-                    </button>
-                    <x-public.mega-menu x-show="megaMenuOpen === 'prodotti'" />
-                </div>
-                <!-- altre voci -->
+            <!-- Nav desktop centrata -->
+            <nav aria-label="Navigazione principale" class="hidden lg:flex lg:items-center lg:gap-10 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+                @php $current = request()->path(); @endphp
+                @foreach([
+                    ['label' => 'Home', 'href' => '/', 'match' => '/'],
+                    ['label' => 'Prodotti', 'href' => '/shop', 'match' => 'shop'],
+                    ['label' => 'Chi Siamo', 'href' => '/chi-siamo', 'match' => 'chi-siamo'],
+                    ['label' => 'Tecnologie', 'href' => '/tecnologie', 'match' => 'tecnologie'],
+                    ['label' => 'Supporto', 'href' => '/supporto', 'match' => 'supporto'],
+                ] as $voce)
+                    @php $isActive = $current === $voce['match'] || str_starts_with($current, $voce['match']); @endphp
+                    <a href="{{ $voce['href'] }}"
+                       @if($isActive) aria-current="page" @endif
+                       class="relative font-sans text-sm font-medium text-ink-soft hover:text-brand-primary transition-colors aria-[current=page]:text-brand-primary aria-[current=page]:font-semibold py-2">
+                        {{ $voce['label'] }}
+                        <span aria-hidden="true"
+                              class="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-brand-primary origin-left scale-x-0 transition-transform duration-250 ease-apple
+                                     {{ $isActive ? 'scale-x-100' : 'group-hover:scale-x-100' }}"></span>
+                    </a>
+                @endforeach
             </nav>
 
-            <!-- Icone azione -->
-            <div class="flex items-center gap-3">
+            <!-- Azioni destra -->
+            <div class="flex items-center gap-2 lg:gap-3">
+                <a href="/contatti"
+                   class="hidden lg:inline-flex items-center rounded-full border border-border-strong px-5 py-2 text-sm font-medium text-ink-soft hover:border-brand-primary hover:text-brand-primary transition-colors">
+                    Contattaci
+                </a>
                 <button aria-label="Cerca" @click="$dispatch('open-search')"
-                        class="p-2 text-neutral-700 hover:text-brand-accent transition-colors">
+                        class="p-2 text-ink-soft hover:text-brand-primary transition-colors">
                     <x-heroicon-o-magnifying-glass class="h-5 w-5" />
                 </button>
-                <a href="/account" aria-label="Account" class="hidden lg:block p-2 text-neutral-700 hover:text-brand-accent transition-colors">
+                <a href="/account" aria-label="Account" class="hidden lg:block p-2 text-ink-soft hover:text-brand-primary transition-colors">
                     <x-heroicon-o-user class="h-5 w-5" />
                 </a>
-                <button aria-label="Lista desideri" class="hidden lg:block p-2 text-neutral-700 hover:text-brand-accent transition-colors">
-                    <x-heroicon-o-heart class="h-5 w-5" />
-                </button>
                 <button aria-label="Carrello" @click="$dispatch('toggle-cart')"
-                        class="relative p-2 text-neutral-700 hover:text-brand-accent transition-colors">
+                        class="relative p-2 text-ink-soft hover:text-brand-primary transition-colors">
                     <x-heroicon-o-shopping-bag class="h-5 w-5" />
                     <span x-show="$store.cart.count > 0" x-text="$store.cart.count"
-                          class="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-accent text-2xs font-semibold text-brand-surface px-1">
+                          class="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-primary text-2xs font-semibold text-surface px-1">
                     </span>
                 </button>
             </div>
         </div>
     </div>
 </header>
+```
+
+### 1.3b `brand-logo`
+
+**Path**: `resources/views/components/public/brand-logo.blade.php`
+
+Componente logo. Se `public/img/brand/logo.svg` esiste lo usa, altrimenti placeholder con scritta SkinTemple in Cormorant 600 + monogramma "ST" in cerchio teal.
+
+```html
+@php $logoPath = public_path('img/brand/logo.svg'); @endphp
+
+@if(file_exists($logoPath))
+    <img src="/img/brand/logo.svg" alt="SkinTemple" {{ $attributes->merge(['class' => 'h-9 w-auto']) }}>
+@else
+    {{-- Placeholder finche il logo definitivo non viene caricato --}}
+    <span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2']) }}>
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary-soft text-brand-primary-700 font-display font-semibold text-sm">
+            ST
+        </span>
+        <span class="font-display text-2xl font-semibold tracking-tight text-ink">
+            Skin<span class="text-brand-primary">Temple</span>
+        </span>
+    </span>
+@endif
 ```
 
 ---
@@ -258,7 +294,7 @@ Sezione con padding verticale responsive e sfondo opzionale.
 
 @php
 $bgClasses = [
-    'white' => 'bg-brand-surface',
+    'white' => 'bg-surface',
     'neutral' => 'bg-neutral-50',
     'dark' => 'bg-neutral-950 text-neutral-200',
 ];
@@ -302,8 +338,8 @@ Menu a tendina a 2+ colonne + immagini promozionali. Glass effect. Ispirato a To
         <div class="col-span-3">
             <h3 class="text-xs font-semibold uppercase tracking-widest text-neutral-500 mb-4">Tipo di Prodotto</h3>
             <ul class="space-y-2">
-                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-accent transition-colors">Creme Viso</a></li>
-                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-accent transition-colors">Sieri e Concentrati</a></li>
+                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-primary transition-colors">Creme Viso</a></li>
+                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-primary transition-colors">Sieri e Concentrati</a></li>
                 <!-- ... -->
             </ul>
         </div>
@@ -311,7 +347,7 @@ Menu a tendina a 2+ colonne + immagini promozionali. Glass effect. Ispirato a To
         <div class="col-span-3">
             <h3 class="text-xs font-semibold uppercase tracking-widest text-neutral-500 mb-4">Per Obiettivo</h3>
             <ul class="space-y-2">
-                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-accent transition-colors">Anti-eta</a></li>
+                <li><a href="#" class="text-sm text-neutral-700 hover:text-brand-primary transition-colors">Anti-eta</a></li>
                 <!-- ... -->
             </ul>
         </div>
@@ -320,7 +356,7 @@ Menu a tendina a 2+ colonne + immagini promozionali. Glass effect. Ispirato a To
             <a href="#" class="group relative overflow-hidden rounded-xl aspect-[3/4]">
                 <img src="..." alt="..." class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                <div class="absolute bottom-4 left-4 text-brand-surface">
+                <div class="absolute bottom-4 left-4 text-surface">
                     <p class="text-sm font-semibold">Scopri i prodotti Viso</p>
                     <span class="text-xs underline">Esplora</span>
                 </div>
@@ -369,7 +405,7 @@ Overlay full-screen navigazione mobile. Si attiva dalla voce "Menu" nella bottom
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
      x-trap.noscroll="mobileMenuOpen"
-     class="fixed inset-0 z-60 bg-brand-surface lg:hidden overflow-y-auto"
+     class="fixed inset-0 z-60 bg-surface lg:hidden overflow-y-auto"
      role="dialog" aria-modal="true" aria-label="Menu navigazione">
     <!-- Header con chiudi -->
     <div class="flex items-center justify-between px-4 h-16 border-b border-neutral-100">
@@ -401,12 +437,12 @@ Overlay full-screen navigazione mobile. Si attiva dalla voce "Menu" nella bottom
 
 <nav aria-label="Breadcrumb" class="mb-6">
     <ol class="flex items-center gap-1.5 text-sm text-neutral-500">
-        <li><a href="/" class="hover:text-brand-accent transition-colors">Home</a></li>
+        <li><a href="/" class="hover:text-brand-primary transition-colors">Home</a></li>
         @foreach($items as $item)
             <li class="flex items-center gap-1.5">
                 <x-heroicon-m-chevron-right class="h-3 w-3 text-neutral-400" />
                 @if($item['url'] ?? null)
-                    <a href="{{ $item['url'] }}" class="hover:text-brand-accent transition-colors">{{ $item['label'] }}</a>
+                    <a href="{{ $item['url'] }}" class="hover:text-brand-primary transition-colors">{{ $item['label'] }}</a>
                 @else
                     <span class="text-neutral-900 font-medium">{{ $item['label'] }}</span>
                 @endif
@@ -431,7 +467,7 @@ Wrapper per la paginazione Laravel con stile SkinTemple. Sovrascrive il template
     @if ($paginator->onFirstPage())
         <span class="p-2 text-neutral-300 cursor-not-allowed"><x-heroicon-m-chevron-left class="h-5 w-5" /></span>
     @else
-        <a href="{{ $paginator->previousPageUrl() }}" class="p-2 text-neutral-700 hover:text-brand-accent transition-colors" aria-label="Pagina precedente">
+        <a href="{{ $paginator->previousPageUrl() }}" class="p-2 text-neutral-700 hover:text-brand-primary transition-colors" aria-label="Pagina precedente">
             <x-heroicon-m-chevron-left class="h-5 w-5" />
         </a>
     @endif
@@ -444,7 +480,7 @@ Wrapper per la paginazione Laravel con stile SkinTemple. Sovrascrive il template
         @if (is_array($element))
             @foreach ($element as $page => $url)
                 @if ($page == $paginator->currentPage())
-                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary text-sm font-semibold text-brand-surface">{{ $page }}</span>
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary text-sm font-semibold text-surface">{{ $page }}</span>
                 @else
                     <a href="{{ $url }}" class="flex h-9 w-9 items-center justify-center rounded-full text-sm text-neutral-700 hover:bg-neutral-100 transition-colors">{{ $page }}</a>
                 @endif
@@ -454,7 +490,7 @@ Wrapper per la paginazione Laravel con stile SkinTemple. Sovrascrive il template
 
     {{-- Successiva --}}
     @if ($paginator->hasMorePages())
-        <a href="{{ $paginator->nextPageUrl() }}" class="p-2 text-neutral-700 hover:text-brand-accent transition-colors" aria-label="Pagina successiva">
+        <a href="{{ $paginator->nextPageUrl() }}" class="p-2 text-neutral-700 hover:text-brand-primary transition-colors" aria-label="Pagina successiva">
             <x-heroicon-m-chevron-right class="h-5 w-5" />
         </a>
     @else
@@ -487,18 +523,20 @@ Wrapper per la paginazione Laravel con stile SkinTemple. Sovrascrive il template
 
 | Variante | Default | Hover | Active | Disabled |
 |----------|---------|-------|--------|----------|
-| `primary` | `bg-brand-accent text-brand-surface` | `bg-brand-accent-deep` | `bg-brand-accent-deep scale-[0.98]` | `opacity-50 cursor-not-allowed` |
-| `secondary` | `bg-brand-surface text-neutral-900 border border-neutral-300` | `border-neutral-400 bg-neutral-50` | `bg-neutral-100` | `opacity-50` |
-| `ghost` | `text-neutral-700` | `text-brand-accent bg-neutral-50` | `bg-neutral-100` | `opacity-50` |
-| `destructive` | `bg-danger text-brand-surface` | `bg-red-600` | `bg-red-700` | `opacity-50` |
+| `primary` | `bg-brand-primary text-surface uppercase tracking-wide` | `bg-brand-primary-hover` | `bg-brand-primary-700 scale-[0.98]` | `opacity-50 cursor-not-allowed` |
+| `secondary` | `bg-transparent text-brand-primary border border-brand-primary uppercase tracking-wide` | `bg-brand-primary-soft` | `bg-brand-primary-100` | `opacity-50` |
+| `ghost` | `text-ink-soft` | `text-brand-primary bg-surface-soft` | `bg-surface-sunken` | `opacity-50` |
+| `destructive` | `bg-danger text-surface` | `bg-red-700` | `bg-red-800` | `opacity-50` |
+
+Le varianti `primary` e `secondary` replicano il pattern del vecchio sito (pill uppercase tracking-wide). La variante `ghost` resta in caso normale.
 
 **Dimensioni**:
 
 | Size | Padding | Font | Raggio |
 |------|---------|------|--------|
-| `sm` | `px-3.5 py-2` | `text-sm` | `rounded-full` (primary) / `rounded-xl` (altri) |
-| `md` | `px-5 py-2.5` | `text-sm` | `rounded-full` / `rounded-xl` |
-| `lg` | `px-6 py-3` | `text-base` | `rounded-full` / `rounded-xl` |
+| `sm` | `px-5 py-2` | `text-xs` | `rounded-full` (primary/secondary) / `rounded-xl` (ghost/destructive) |
+| `md` | `px-7 py-2.5` | `text-sm` | `rounded-full` / `rounded-xl` |
+| `lg` | `px-9 py-3.5` | `text-sm` | `rounded-full` / `rounded-xl` |
 
 ```html
 @props([
@@ -512,19 +550,19 @@ Wrapper per la paginazione Laravel con stile SkinTemple. Sovrascrive il template
 ])
 
 @php
-$base = 'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 ease-apple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+$base = 'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 ease-apple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
 $variants = [
-    'primary' => 'bg-brand-accent text-brand-surface hover:bg-brand-accent-deep active:scale-[0.98] rounded-full',
-    'secondary' => 'bg-brand-surface text-neutral-900 border border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 active:bg-neutral-100 rounded-xl',
-    'ghost' => 'text-neutral-700 hover:text-brand-accent hover:bg-neutral-50 active:bg-neutral-100 rounded-xl',
-    'destructive' => 'bg-danger text-brand-surface hover:bg-red-600 active:bg-red-700 rounded-full',
+    'primary' => 'bg-brand-primary text-surface uppercase tracking-wide hover:bg-brand-primary-hover active:scale-[0.98] rounded-full',
+    'secondary' => 'bg-transparent text-brand-primary border border-brand-primary uppercase tracking-wide hover:bg-brand-primary-soft active:bg-brand-primary-100 rounded-full',
+    'ghost' => 'text-ink-soft hover:text-brand-primary hover:bg-surface-soft active:bg-surface-sunken rounded-xl',
+    'destructive' => 'bg-danger text-surface hover:bg-red-700 active:bg-red-800 rounded-full',
 ];
 
 $sizes = [
-    'sm' => 'px-3.5 py-2 text-sm',
-    'md' => 'px-5 py-2.5 text-sm',
-    'lg' => 'px-6 py-3 text-base',
+    'sm' => 'px-5 py-2 text-xs',
+    'md' => 'px-7 py-2.5 text-sm',
+    'lg' => 'px-9 py-3.5 text-sm',
 ];
 
 $classes = $base . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . ($sizes[$size] ?? $sizes['md']);
@@ -554,7 +592,7 @@ $classes = $base . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . (
 @props(['href' => '#'])
 
 <a href="{{ $href }}"
-   {{ $attributes->merge(['class' => 'text-brand-accent-deep hover:text-brand-accent underline-offset-2 hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 rounded-sm']) }}>
+   {{ $attributes->merge(['class' => 'text-brand-primary hover:text-brand-primary-hover underline-offset-2 hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm']) }}>
     {{ $slot }}
 </a>
 ```
@@ -576,8 +614,10 @@ $classes = $base . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . (
 
 @php
 $variants = [
-    'default' => 'bg-neutral-100 text-neutral-700',
-    'accent' => 'bg-brand-accent text-brand-surface',
+    'default' => 'bg-surface-sunken text-ink-soft',
+    'accent' => 'bg-brand-accent text-surface',
+    'primary' => 'bg-brand-primary text-surface',
+    'primary-soft' => 'bg-brand-primary-soft text-brand-primary-700',
     'success' => 'bg-success-bg text-success',
     'warning' => 'bg-warning-bg text-warning',
     'danger' => 'bg-danger-bg text-danger',
@@ -732,7 +772,7 @@ $sizes = ['sm' => 'h-8 w-8 text-xs', 'md' => 'h-10 w-10 text-sm', 'lg' => 'h-14 
 <span x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false" class="relative inline-flex">
     {{ $slot }}
     <span x-show="show" x-transition:enter="transition ease-apple duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-          class="absolute {{ $position === 'top' ? 'bottom-full mb-2' : 'top-full mt-2' }} left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-neutral-900 px-2.5 py-1.5 text-xs text-brand-surface shadow-soft-md z-20 pointer-events-none"
+          class="absolute {{ $position === 'top' ? 'bottom-full mb-2' : 'top-full mt-2' }} left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-neutral-900 px-2.5 py-1.5 text-xs text-surface shadow-soft-md z-20 pointer-events-none"
           role="tooltip">
         {{ $text }}
     </span>
@@ -774,7 +814,7 @@ $sizes = ['sm' => 'h-8 w-8 text-xs', 'md' => 'h-10 w-10 text-sm', 'lg' => 'h-14 
     @endif
     <input type="{{ $type }}"
            {{ $attributes->merge([
-               'class' => 'block w-full rounded-xl border bg-brand-surface px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed'
+               'class' => 'block w-full rounded-xl border bg-surface px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed'
                    . ($icon ? ' pl-10' : '')
                    . ($error ? ' border-danger focus:ring-danger/20 focus:border-danger' : ' border-neutral-300'),
            ]) }}
@@ -795,7 +835,7 @@ Come input ma con `<textarea>`. Props: `error`, `rows` (default 4).
 
 <textarea rows="{{ $rows }}"
           {{ $attributes->merge([
-              'class' => 'block w-full rounded-xl border bg-brand-surface px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent resize-y disabled:bg-neutral-100 disabled:cursor-not-allowed'
+              'class' => 'block w-full rounded-xl border bg-surface px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-y disabled:bg-neutral-100 disabled:cursor-not-allowed'
                   . ($error ? ' border-danger focus:ring-danger/20 focus:border-danger' : ' border-neutral-300'),
           ]) }}
           @if($error) aria-invalid="true" @endif>{{ $slot }}</textarea>
@@ -812,7 +852,7 @@ Come input ma con `<textarea>`. Props: `error`, `rows` (default 4).
 
 <div class="relative">
     <select {{ $attributes->merge([
-        'class' => 'block w-full appearance-none rounded-xl border bg-brand-surface px-4 py-2.5 pr-10 text-sm text-neutral-900 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent'
+        'class' => 'block w-full appearance-none rounded-xl border bg-surface px-4 py-2.5 pr-10 text-sm text-neutral-900 shadow-inner-soft transition-colors duration-200 ease-apple focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary'
             . ($error ? ' border-danger' : ' border-neutral-300'),
     ]) }}>
         {{ $slot }}
@@ -834,7 +874,7 @@ Come input ma con `<textarea>`. Props: `error`, `rows` (default 4).
 
 <label class="inline-flex items-start gap-2.5 cursor-pointer">
     <input type="checkbox"
-           {{ $attributes->merge(['class' => 'mt-0.5 h-4 w-4 rounded-md border-neutral-300 text-brand-accent shadow-inner-soft focus:ring-2 focus:ring-brand-accent/20 transition-colors']) }}>
+           {{ $attributes->merge(['class' => 'mt-0.5 h-4 w-4 rounded-md border-neutral-300 text-brand-primary shadow-inner-soft focus:ring-2 focus:ring-brand-primary/20 transition-colors']) }}>
     @if($label)
         <span class="text-sm text-neutral-700">{{ $label }}</span>
     @else
@@ -867,10 +907,10 @@ Toggle switch stile iOS.
             :aria-checked="on.toString()"
             x-data="{ on: @js($checked) }"
             @click="on = !on; $dispatch('input', on)"
-            :class="on ? 'bg-brand-accent' : 'bg-neutral-300'"
-            class="relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ease-apple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2">
+            :class="on ? 'bg-brand-primary' : 'bg-neutral-300'"
+            class="relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ease-apple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
         <span :class="on ? 'translate-x-5' : 'translate-x-0.5'"
-              class="pointer-events-none mt-0.5 h-5 w-5 rounded-full bg-brand-surface shadow-soft-sm transition-transform duration-200 ease-apple"></span>
+              class="pointer-events-none mt-0.5 h-5 w-5 rounded-full bg-surface shadow-soft-sm transition-transform duration-200 ease-apple"></span>
     </button>
     @if($label)
         <span class="text-sm text-neutral-700">{{ $label }}</span>
@@ -955,26 +995,33 @@ Barra di azioni in fondo al form (submit, cancella).
 
 **Path**: `resources/views/components/public/product-card.blade.php`
 
-La card e il componente centrale dell'e-commerce. Ispirata al pattern Top Beauty (brand label uppercase + nome + prezzo + hover CTA) con estetica Apple SkinTemple.
+La card e il componente centrale dell'e-commerce. Replica esattamente il pattern del vecchio sito SkinTemple: sfondo bianco, immagine prodotto centrata su area quadrata con padding interno, sotto nome prodotto (uppercase per device, normale per skincare/monouso), SKU/etichetta muted, link "Scopri di piu >" in teal. Su hover: `-translate-y-0.5` e shadow piu profonda.
 
 **Props**:
 | Prop | Tipo | Default | Descrizione |
 |------|------|---------|-------------|
-| `product` | object | required | Oggetto prodotto con: `name`, `slug`, `brand`, `price`, `compare_price`, `image_url`, `image_alt`, `is_new`, `is_promo`, `promo_label` |
+| `product` | object | required | Oggetto prodotto con: `name`, `slug`, `sub` (SKU o descrizione tecnica breve), `price`, `compare_price`, `image_url`, `image_alt`, `is_new`, `is_promo`, `is_b2b`, `promo_label`, `category` (device/skincare/monouso) |
+| `show_price` | bool | true | Se false (es. device con "Richiedi preventivo") nasconde il prezzo |
 
 **Stati**:
-- Default: immagine + brand + nome + prezzo
-- Hover (desktop): appare CTA "Aggiungi al carrello" overlay sull'immagine + icona cuore
-- Badge: "Novita" (accent), "Promo" (danger), custom label
+- Default: immagine + nome + SKU + link "Scopri di piu >"
+- Hover (desktop): `shadow-soft-lg`, `-translate-y-0.5`, icona wishlist appare in alto a destra
+- Badge: "Novita" (accent), "B2B" (primary-soft + primary-700), "Promo" (danger)
 
 ```html
-@props(['product'])
+@props(['product', 'show_price' => true])
 
-<article class="group relative flex flex-col rounded-2xl bg-brand-surface shadow-soft-sm hover:shadow-soft-md transition-shadow duration-300 ease-apple overflow-hidden">
-    <!-- Immagine -->
-    <a href="/prodotti/{{ $product->slug }}" class="relative aspect-square overflow-hidden">
+@php
+    $nameClass = $product->category === 'device'
+        ? 'text-sm font-semibold uppercase tracking-wide text-ink'
+        : 'text-sm font-medium text-ink';
+@endphp
+
+<article class="group relative flex flex-col rounded-2xl bg-surface p-4 sm:p-5 shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300 ease-apple">
+    <!-- Immagine quadrata centrata -->
+    <a href="/prodotti/{{ $product->slug }}" class="relative aspect-square overflow-hidden rounded-xl bg-surface-soft mb-4">
         <img src="{{ $product->image_url }}" alt="{{ $product->image_alt ?? $product->name }}"
-             class="h-full w-full object-cover transition-transform duration-500 ease-apple group-hover:scale-105"
+             class="h-full w-full object-contain p-4 transition-transform duration-500 ease-apple group-hover:scale-105"
              loading="lazy" decoding="async">
 
         <!-- Badge -->
@@ -987,39 +1034,46 @@ La card e il componente centrale dell'e-commerce. Ispirata al pattern Top Beauty
                 <x-public.badge variant="danger" size="sm">{{ $product->promo_label ?? 'Promo' }}</x-public.badge>
             </span>
         @endif
+        @if($product->is_b2b)
+            <span class="absolute top-3 right-3">
+                <x-public.badge variant="primary-soft" size="sm">B2B</x-public.badge>
+            </span>
+        @endif
 
         <!-- Wishlist -->
         <button aria-label="Aggiungi alla lista desideri"
-                class="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-brand-surface/80 backdrop-blur-sm text-neutral-500 opacity-0 group-hover:opacity-100 hover:text-danger transition-all duration-200 ease-apple shadow-soft-sm">
+                class="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 backdrop-blur-sm text-muted opacity-0 group-hover:opacity-100 hover:text-danger transition-all duration-200 ease-apple shadow-soft-sm">
             <x-heroicon-o-heart class="h-5 w-5" />
         </button>
-
-        <!-- CTA hover overlay (desktop) -->
-        <div class="absolute inset-x-3 bottom-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 ease-apple hidden lg:block">
-            <button class="w-full rounded-full bg-brand-accent py-2.5 text-sm font-semibold text-brand-surface hover:bg-brand-accent-deep transition-colors shadow-soft-md">
-                Aggiungi al carrello
-            </button>
-        </div>
     </a>
 
     <!-- Info -->
-    <div class="flex flex-col gap-1 p-3 sm:p-4">
-        <span class="text-2xs font-medium uppercase tracking-widest text-neutral-500">
-            {{ $product->brand }}
-        </span>
-        <h3 class="text-sm font-medium leading-snug text-neutral-900 line-clamp-2">
-            <a href="/prodotti/{{ $product->slug }}" class="hover:text-brand-accent transition-colors">
+    <div class="flex flex-col gap-1 flex-1">
+        <h3 class="{{ $nameClass }} leading-snug line-clamp-2">
+            <a href="/prodotti/{{ $product->slug }}" class="hover:text-brand-primary transition-colors">
                 {{ $product->name }}
             </a>
         </h3>
-        <div class="flex items-center gap-2 mt-1">
-            @if($product->compare_price)
-                <span class="text-sm text-neutral-400 line-through">€{{ number_format($product->compare_price, 2, ',', '.') }}</span>
-                <span class="text-base font-semibold text-brand-accent">€{{ number_format($product->price, 2, ',', '.') }}</span>
-            @else
-                <span class="text-base font-semibold text-neutral-900">€{{ number_format($product->price, 2, ',', '.') }}</span>
-            @endif
-        </div>
+        @if($product->sub)
+            <p class="font-mono text-xs text-muted line-clamp-1">{{ $product->sub }}</p>
+        @endif
+
+        @if($show_price)
+            <div class="flex items-center gap-2 mt-1">
+                @if($product->compare_price)
+                    <span class="text-sm text-muted line-through">€{{ number_format($product->compare_price, 2, ',', '.') }}</span>
+                    <span class="text-base font-semibold text-brand-primary-700">€{{ number_format($product->price, 2, ',', '.') }}</span>
+                @else
+                    <span class="text-base font-semibold text-ink">€{{ number_format($product->price, 2, ',', '.') }}</span>
+                @endif
+            </div>
+        @endif
+
+        <a href="/prodotti/{{ $product->slug }}"
+           class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-primary hover:text-brand-primary-hover transition-colors">
+            Scopri di piu
+            <x-heroicon-m-chevron-right class="h-3.5 w-3.5" />
+        </a>
     </div>
 </article>
 ```
@@ -1029,6 +1083,7 @@ La card e il componente centrale dell'e-commerce. Ispirata al pattern Top Beauty
 - Wishlist button ha `aria-label`
 - Badge usa colore + testo (non solo colore)
 - `line-clamp-2` con testo completo accessibile agli screen reader
+- Contrasto: `brand.primary-700` per prezzo scontato e PASS WCAG AA su `surface`
 
 ---
 
@@ -1059,7 +1114,7 @@ Variante lista orizzontale per vista alternativa nello shop.
 ```html
 @props(['product'])
 
-<article class="flex gap-4 rounded-2xl bg-brand-surface p-4 shadow-soft-sm">
+<article class="flex gap-4 rounded-2xl bg-surface p-4 shadow-soft-sm">
     <a href="/prodotti/{{ $product->slug }}" class="shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden">
         <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-full w-full object-cover" loading="lazy">
     </a>
@@ -1067,7 +1122,7 @@ Variante lista orizzontale per vista alternativa nello shop.
         <div>
             <span class="text-2xs font-medium uppercase tracking-widest text-neutral-500">{{ $product->brand }}</span>
             <h3 class="text-sm font-medium text-neutral-900 mt-0.5">
-                <a href="/prodotti/{{ $product->slug }}" class="hover:text-brand-accent transition-colors">{{ $product->name }}</a>
+                <a href="/prodotti/{{ $product->slug }}" class="hover:text-brand-primary transition-colors">{{ $product->name }}</a>
             </h3>
         </div>
         <div class="flex items-center justify-between mt-2">
@@ -1140,7 +1195,7 @@ Gruppo filtro collassabile con Alpine.js.
 <label class="flex items-center justify-between cursor-pointer group">
     <span class="flex items-center gap-2">
         <input type="checkbox" name="{{ $name }}" value="{{ $value }}"
-               class="h-4 w-4 rounded-md border-neutral-300 text-brand-accent focus:ring-2 focus:ring-brand-accent/20">
+               class="h-4 w-4 rounded-md border-neutral-300 text-brand-primary focus:ring-2 focus:ring-brand-primary/20">
         <span class="text-sm text-neutral-700 group-hover:text-neutral-900 transition-colors">{{ $label }}</span>
     </span>
     @if($count !== null)
@@ -1172,7 +1227,7 @@ Slider doppio per range prezzo. Gestito con Alpine.js.
     @foreach($colors as $color)
         <label class="relative cursor-pointer" title="{{ $color['name'] }}">
             <input type="checkbox" name="color[]" value="{{ $color['value'] }}" class="peer sr-only">
-            <span class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-transparent peer-checked:border-brand-accent transition-colors"
+            <span class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-transparent peer-checked:border-brand-primary transition-colors"
                   style="background-color: {{ $color['hex'] }}">
                 <x-heroicon-m-check class="h-3.5 w-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
             </span>
@@ -1199,7 +1254,7 @@ Mostra i filtri attivi come chip rimuovibili + button "Rimuovi tutti".
             {{ $filter['label'] }}
         </x-public.chip>
     @endforeach
-    <button wire:click="clearAllFilters" class="text-xs text-brand-accent hover:underline">
+    <button wire:click="clearAllFilters" class="text-xs text-brand-primary hover:underline">
         Rimuovi tutti
     </button>
 </div>
@@ -1403,10 +1458,10 @@ Card selezionabile per metodo spedizione: nome, tempi, prezzo. Radio button inte
 @props(['method', 'selected' => false])
 
 <label class="flex items-center gap-4 cursor-pointer rounded-xl border p-4 transition-colors duration-200
-              {{ $selected ? 'border-brand-accent bg-brand-accent/5' : 'border-neutral-300 hover:border-neutral-400' }}">
+              {{ $selected ? 'border-brand-primary bg-brand-primary/5' : 'border-neutral-300 hover:border-neutral-400' }}">
     <input type="radio" name="shipping_method" value="{{ $method->id }}"
            @checked($selected)
-           class="h-4 w-4 border-neutral-300 text-brand-accent focus:ring-brand-accent/20">
+           class="h-4 w-4 border-neutral-300 text-brand-primary focus:ring-brand-primary/20">
     <div class="flex-1">
         <p class="text-sm font-medium text-neutral-900">{{ $method->name }}</p>
         <p class="text-xs text-neutral-500">{{ $method->delivery_time }}</p>
@@ -1609,7 +1664,7 @@ Overlay full-screen (o quasi) con campo ricerca prominente. Gestito da Livewire 
      x-transition:enter-end="opacity-100"
      x-trap.noscroll="searchOpen"
      @keydown.escape.window="searchOpen = false"
-     class="fixed inset-0 z-60 bg-brand-surface/95 backdrop-blur-xl"
+     class="fixed inset-0 z-60 bg-surface/95 backdrop-blur-xl"
      role="dialog" aria-modal="true" aria-label="Ricerca">
     <div class="mx-auto max-w-2xl px-4 pt-20 sm:pt-32">
         <livewire:public.catalog.product-search />
@@ -1672,7 +1727,7 @@ Notifiche toast in alto a destra. Varianti: success, error, warning, info. Auto-
              x-transition:leave="transition ease-apple duration-200"
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0 translate-x-4"
-             class="pointer-events-auto flex items-center gap-3 rounded-2xl bg-brand-surface px-4 py-3 shadow-soft-lg border border-neutral-200/50 max-w-sm">
+             class="pointer-events-auto flex items-center gap-3 rounded-2xl bg-surface px-4 py-3 shadow-soft-lg border border-neutral-200/50 max-w-sm">
             <!-- icona variant-dependent -->
             <p class="text-sm text-neutral-900" x-text="toast.message"></p>
             <button @click="toasts = toasts.filter(t => t.id !== toast.id)" aria-label="Chiudi" class="ml-auto shrink-0 p-1 text-neutral-400 hover:text-neutral-700">
@@ -1748,28 +1803,28 @@ Barra orizzontale con 3-4 trust signals. Tipicamente sotto l'hero o sopra il foo
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
             <div class="flex items-center gap-3 py-4 sm:px-6 lg:justify-center">
-                <x-heroicon-o-truck class="h-6 w-6 text-brand-accent shrink-0" />
+                <x-heroicon-o-truck class="h-6 w-6 text-brand-primary shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-neutral-900">Spedizione gratuita</p>
                     <p class="text-xs text-neutral-500">Per ordini superiori a €59</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 py-4 sm:px-6 lg:justify-center">
-                <x-heroicon-o-flag class="h-6 w-6 text-brand-accent shrink-0" />
+                <x-heroicon-o-flag class="h-6 w-6 text-brand-primary shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-neutral-900">100% Made in Italy</p>
                     <p class="text-xs text-neutral-500">Qualita e affidabilita italiana</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 py-4 sm:px-6 lg:justify-center">
-                <x-heroicon-o-lock-closed class="h-6 w-6 text-brand-accent shrink-0" />
+                <x-heroicon-o-lock-closed class="h-6 w-6 text-brand-primary shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-neutral-900">Pagamento sicuro</p>
                     <p class="text-xs text-neutral-500">Transazioni protette e criptate</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 py-4 sm:px-6 lg:justify-center">
-                <x-heroicon-o-chat-bubble-left-right class="h-6 w-6 text-brand-accent shrink-0" />
+                <x-heroicon-o-chat-bubble-left-right class="h-6 w-6 text-brand-primary shrink-0" />
                 <div>
                     <p class="text-sm font-medium text-neutral-900">Assistenza dedicata</p>
                     <p class="text-xs text-neutral-500">Supporto rapido e competente</p>

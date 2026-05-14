@@ -72,7 +72,7 @@ Durata: **300ms** con easing Apple `cubic-bezier(0.4, 0, 0.2, 1)`.
 | Mega menu | `shadow-glass` | — | — |
 | Toast | `shadow-soft-lg` | — | — |
 | Button primario | Nessuna ombra (colore pieno basta) | Leggero `shadow-soft-sm` opzionale | — |
-| Input | `shadow-inner-soft` | — | `ring-2 ring-brand-accent` |
+| Input | `shadow-inner-soft` | — | `ring-2 ring-brand-primary` |
 | Glass overlay | `shadow-glass` | — | — |
 
 ---
@@ -91,8 +91,8 @@ Durata: **300ms** con easing Apple `cubic-bezier(0.4, 0, 0.2, 1)`.
 |----------|--------|-----------|
 | Divider orizzontale | `border-neutral-200` | Linea sottile visibile ma discreta |
 | Input default | `border-neutral-300` | Bordo percepibile per definire l'area |
-| Input focus | `border-brand-accent ring-2 ring-brand-accent/20` | Bordo oro con ring semi-trasparente |
+| Input focus | `border-brand-primary ring-2 ring-brand-primary/20` | Bordo teal con ring semi-trasparente |
 | Input error | `border-danger` | Bordo rosso per errore validazione |
 | Card prodotto | Nessun bordo — solo ombra | L'ombra soft definisce i limiti |
 | Separatore sezione | `border-t border-neutral-100` | Quasi invisibile, crea separazione sottile |
-| Bordo selezionato (variante) | `border-2 border-brand-accent` | Cerchio colore selezionato |
+| Bordo selezionato (variante) | `border-2 border-brand-primary` | Cerchio colore selezionato |
