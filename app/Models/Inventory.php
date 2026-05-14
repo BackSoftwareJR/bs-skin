@@ -106,7 +106,7 @@ class Inventory extends Model
         });
     }
 
-    public function increment(int $quantity): void
+    public function addStock(int $quantity): void
     {
         $this->update([
             'quantity' => $this->quantity + $quantity,
