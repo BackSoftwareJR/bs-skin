@@ -100,12 +100,13 @@ class ProductSearch extends Component
         $this->recentSearches = [];
     }
 
-    public function goToFullResults(): void
+    public function goToFullResults(): mixed
     {
         if ($this->query) {
             $this->addToRecentSearches($this->query);
             return redirect()->to('/shop?q=' . urlencode($this->query));
         }
+        return null;
     }
 
     protected function loadRecentSearches(): void
