@@ -68,7 +68,7 @@ class ProductGrid extends Component
     protected function getProductsQuery()
     {
         $query = Product::query()
-            ->with(['brand', 'categories', 'media', 'variants.inventory'])
+            ->with(['brand', 'categories', 'media', 'variants'])
             ->published();
 
         // Ricerca testuale
