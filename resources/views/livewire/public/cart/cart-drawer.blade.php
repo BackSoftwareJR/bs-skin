@@ -5,6 +5,7 @@
 
     {{-- Backdrop --}}
     <div x-show="open"
+         style="display:none"
          @click="$wire.close()"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
@@ -17,6 +18,7 @@
 
     {{-- Drawer slide-over da destra --}}
     <div x-show="open"
+         style="display:none"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="translate-x-full"
          x-transition:enter-end="translate-x-0"
