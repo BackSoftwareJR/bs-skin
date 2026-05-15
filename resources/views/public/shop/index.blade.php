@@ -47,6 +47,7 @@
     <div x-data="{ open: false }" 
          @open-filters.window="open = true">
         <div x-show="open"
+             style="display:none"
              x-transition:enter="transition ease-apple duration-300"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -57,6 +58,7 @@
             
             <!-- Drawer -->
             <div x-show="open"
+                 style="display:none"
                  x-transition:enter="transition ease-apple duration-300"
                  x-transition:enter-start="translate-y-full"
                  x-transition:enter-end="translate-y-0"

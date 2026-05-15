@@ -3,6 +3,7 @@
      @open-search.window="open = true">
     <!-- Overlay fullscreen -->
     <div x-show="open"
+         style="display:none"
          x-transition:enter="transition ease-apple duration-200"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
