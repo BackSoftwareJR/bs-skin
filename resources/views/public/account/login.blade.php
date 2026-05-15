@@ -6,6 +6,7 @@
     <meta name="description" content="Accedi al tuo account SkinTemple con un codice OTP sicuro e senza password.">
 @endpush
 
+@section('content')
 <div class="min-h-screen bg-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="w-full max-w-md">
         <!-- Header -->
@@ -39,3 +40,4 @@
         </div>
     </div>
 </div>
+@endsection

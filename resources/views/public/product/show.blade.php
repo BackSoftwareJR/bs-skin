@@ -17,6 +17,7 @@
     @endpush
 @endif
 
+@section('content')
 <div class="min-h-screen bg-surface">
     <x-public.container class="py-8">
         @if($product)
@@ -306,3 +307,4 @@
         @endif
     </x-public.container>
 </div>
+@endsection

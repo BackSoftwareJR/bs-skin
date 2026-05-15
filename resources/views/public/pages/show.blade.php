@@ -14,6 +14,7 @@
     @endpush
 @endif
 
+@section('content')
 <div class="min-h-screen bg-surface">
     @if($page)
         <!-- Breadcrumb -->
@@ -67,3 +68,4 @@
         </x-public.section>
     @endif
 </div>
+@endsection

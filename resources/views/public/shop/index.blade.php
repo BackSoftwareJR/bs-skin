@@ -6,6 +6,7 @@
     <meta name="description" content="Scopri tutti i prodotti SkinTemple: tecnologie multifunzione, cosmetici professionali e monouso per il centro estetico.">
 @endpush
 
+@section('content')
 <div class="min-h-screen bg-surface">
     <x-public.container class="py-8">
         <!-- Breadcrumb -->
@@ -76,3 +77,4 @@
         </div>
     </div>
 </div>
+@endsection

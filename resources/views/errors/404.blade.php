@@ -2,6 +2,7 @@
 
 @section('title', 'Pagina non trovata - SkinTemple')
 
+@section('content')
 <div class="min-h-screen flex items-center justify-center">
     <x-public.container>
         <div class="text-center">
@@ -21,3 +22,4 @@
         </div>
     </x-public.container>
 </div>
+@endsection

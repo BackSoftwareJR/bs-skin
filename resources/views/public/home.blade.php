@@ -6,6 +6,7 @@
     <meta name="description" content="Tecnologie multifunzione al servizio del centro estetico. Made in Italy, assistenza dedicata, noleggio e vendita.">
 @endpush
 
+@section('content')
 {{-- Renderizza blocchi CMS dinamici --}}
 @php 
     $blocks = \App\Models\Block::where('location', 'homepage')
@@ -164,3 +165,4 @@
         </x-public.container>
     </x-public.section>
 @endif
+@endsection

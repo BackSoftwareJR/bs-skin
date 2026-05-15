@@ -2,6 +2,7 @@
 
 @section('title', 'Carrello - SkinTemple')
 
+@section('content')
 <x-public.container>
     <div class="py-8">
         <h1 class="text-3xl font-semibold text-brand-ink mb-8">Il tuo carrello</h1>
@@ -18,3 +19,4 @@
         </div>
     </div>
 </x-public.container>
+@endsection
