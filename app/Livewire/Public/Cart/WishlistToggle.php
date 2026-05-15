@@ -19,7 +19,7 @@ class WishlistToggle extends Component
         $this->checkWishlistStatus();
     }
 
-    public function toggle(): void
+    public function toggle()
     {
         // Verifica se il customer è loggato
         $customer = auth('customer')->user();
