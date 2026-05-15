@@ -7,7 +7,7 @@
             <h3 class="text-lg font-semibold text-neutral-900 mb-2">Iscrizione completata!</h3>
             <p class="text-sm text-neutral-600">{{ $message }}</p>
             
-            <button wire:click="reset" class="mt-4 text-sm link-teal">
+            <button wire:click="resetForm" class="mt-4 text-sm link-teal">
                 Iscriviti con un'altra email
             </button>
         </div>

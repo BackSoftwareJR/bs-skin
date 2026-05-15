@@ -84,7 +84,7 @@ class SubscribeForm extends Component
         }
     }
 
-    public function reset(): void
+    public function resetForm(): void
     {
         $this->email = '';
         $this->name = '';
