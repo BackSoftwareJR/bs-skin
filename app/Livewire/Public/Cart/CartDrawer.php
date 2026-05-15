@@ -1,65 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Public\Cart;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
-use Illuminate\Support\Collection;
-use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Coupon;
+use App\Services\CartService;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class CartDrawer extends Component
 {
     public bool $isOpen = false;
-    public Collection $items;
-    public float $subtotal = 0;
-    public float $discountTotal = 0;
-    public float $total = 0;
-    public string $couponCode = '';
+
+    /** @var array<int, array<string, mixed>> */
+    public array $items = [];
+
+    public float $subtotal      = 0.0;
+    public float $discountTotal = 0.0;
+    public float $total         = 0.0;
+    public int   $count         = 0;
+
+    public string  $couponCode    = '';
     public ?string $couponMessage = null;
-    public bool $couponApplied = false;
-    
-    protected $rules = [
+    public bool    $couponApplied = false;
+
+    protected array $rules = [
         'couponCode' => 'required|string|min:3|max:30',
     ];
 
-    public function mount()
+    public function mount(CartService $cart): void
     {
-        $this->items = collect();
-        $this->loadCart();
+        $this->refreshCart($cart);
     }
 
     #[On('cart-updated')]
-    public function loadCart(): void
+    public function refreshCart(CartService $cart): void
     {
-        $cartToken = session('cart_token');
-        
-        if (!$cartToken) {
-            $this->items = collect();
-            $this->recalculate();
-            return;
-        }
-
-        $cart = Cart::where('session_token', $cartToken)->first();
-        
-        if (!$cart) {
-            $this->items = collect();
-            $this->recalculate();
-            return;
-        }
-
-        $this->items = $cart->items()
-            ->with(['product', 'variant'])
-            ->get();
-            
-        $this->recalculate();
+        $this->items = array_values($cart->get());
+        $this->count = $cart->count();
+        $this->recalculate($cart);
     }
 
     #[On('cart-open')]
-    public function open(): void
+    public function open(CartService $cart): void
     {
         $this->isOpen = true;
+        $this->refreshCart($cart);
+    }
+
+    public function openDrawer(CartService $cart): void
+    {
+        $this->isOpen = true;
+        $this->refreshCart($cart);
     }
 
     public function close(): void
@@ -67,127 +60,89 @@ class CartDrawer extends Component
         $this->isOpen = false;
     }
 
-    public function updateQuantity(int $cartItemId, int $quantity): void
+    public function removeItem(int $productId, CartService $cart): void
     {
-        if ($quantity < 1) {
-            $this->removeItem($cartItemId);
-            return;
-        }
-
-        $item = CartItem::find($cartItemId);
-        
-        if (!$item) {
-            return;
-        }
-
-        // TODO: delegare a UpdateCartItemAction quando disponibile
-        // Controllo stock inline per ora
-        if ($item->variant && $item->variant->inventory) {
-            $availableStock = $item->variant->inventory->quantity;
-            if ($quantity > $availableStock) {
-                $this->dispatch('toast', [
-                    'type' => 'error',
-                    'message' => 'Stock non sufficiente'
-                ]);
-                return;
-            }
-        }
-
-        $item->update(['quantity' => $quantity]);
-        
-        $this->loadCart();
-        $this->dispatch('cart-updated', count: $this->items->count(), total: $this->total);
+        $cart->remove($productId);
+        $this->refreshCart($cart);
+        $this->dispatch('cart-updated');
+        $this->dispatch('toast', [
+            'type'    => 'success',
+            'message' => 'Prodotto rimosso dal carrello.',
+        ]);
     }
 
-    public function removeItem(int $cartItemId): void
+    public function updateQuantity(int $productId, int $qty, CartService $cart): void
     {
-        $item = CartItem::find($cartItemId);
-        
-        if ($item) {
-            // TODO: delegare a RemoveFromCartAction quando disponibile
-            $item->delete();
-            
-            $this->loadCart();
-            $this->dispatch('cart-updated', count: $this->items->count(), total: $this->total);
-            
-            $this->dispatch('toast', [
-                'type' => 'success',
-                'message' => 'Prodotto rimosso dal carrello'
-            ]);
+        if ($qty < 1) {
+            $this->removeItem($productId, $cart);
+            return;
         }
+        $cart->update($productId, $qty);
+        $this->refreshCart($cart);
+        $this->dispatch('cart-updated');
     }
 
-    public function applyCoupon(): void
+    public function clearCart(CartService $cart): void
+    {
+        $cart->clear();
+        $this->refreshCart($cart);
+        $this->dispatch('cart-updated');
+        $this->dispatch('toast', ['type' => 'info', 'message' => 'Carrello svuotato.']);
+    }
+
+    public function applyCoupon(CartService $cart): void
     {
         $this->validate();
 
-        // TODO: delegare a ApplyCouponAction quando disponibile
-        // Logica semplificata per ora
-        $coupon = Coupon::where('code', $this->couponCode)
-            ->valid()
-            ->first();
+        $coupon = Coupon::where('code', $this->couponCode)->valid()->first();
 
         if (!$coupon) {
-            $this->couponMessage = 'Codice coupon non valido o scaduto';
+            $this->couponMessage = 'Codice coupon non valido o scaduto.';
             $this->couponApplied = false;
             return;
         }
 
-        // Salva coupon nella sessione
         session(['applied_coupon' => $coupon->id]);
-        
         $this->couponMessage = "Sconto applicato: -{$coupon->discount_amount}€";
         $this->couponApplied = true;
-        
-        $this->recalculate();
-        
-        $this->dispatch('toast', [
-            'type' => 'success', 
-            'message' => 'Coupon applicato!'
-        ]);
+
+        $this->recalculate($cart);
+        $this->dispatch('toast', ['type' => 'success', 'message' => 'Coupon applicato!']);
     }
 
-    public function removeCoupon(): void
+    public function removeCoupon(CartService $cart): void
     {
         session()->forget('applied_coupon');
-        $this->couponCode = '';
+        $this->couponCode    = '';
         $this->couponMessage = null;
         $this->couponApplied = false;
-        
-        $this->recalculate();
-        
-        $this->dispatch('toast', [
-            'type' => 'info',
-            'message' => 'Coupon rimosso'
-        ]);
+
+        $this->recalculate($cart);
+        $this->dispatch('toast', ['type' => 'info', 'message' => 'Coupon rimosso.']);
     }
 
     public function goToCheckout(): void
     {
-        if ($this->items->isEmpty()) {
+        if (empty($this->items)) {
             return;
         }
-
         $this->redirect('/checkout');
     }
 
-    protected function recalculate(): void
+    protected function recalculate(CartService $cart): void
     {
-        $this->subtotal = $this->items->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
+        $this->subtotal = $cart->total();
 
-        // Applica coupon se presente
-        $this->discountTotal = 0;
+        $this->discountTotal = 0.0;
         if (session('applied_coupon')) {
             $coupon = Coupon::find(session('applied_coupon'));
             if ($coupon) {
-                $this->discountTotal = min($coupon->discount_amount, $this->subtotal);
+                $this->discountTotal = (float) min($coupon->discount_amount, $this->subtotal);
                 $this->couponApplied = true;
             }
         }
 
-        $this->total = max(0, $this->subtotal - $this->discountTotal);
+        $this->total = max(0.0, $this->subtotal - $this->discountTotal);
     }
 
     public function render()

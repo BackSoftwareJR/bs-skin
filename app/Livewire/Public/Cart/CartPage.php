@@ -1,56 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Public\Cart;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
-use Illuminate\Support\Collection;
-use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Coupon;
+use App\Services\CartService;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class CartPage extends Component
 {
-    public Collection $items;
-    public float $subtotal = 0;
-    public float $discountTotal = 0;
-    public float $total = 0;
-    public string $couponCode = '';
-    public ?string $couponMessage = null;
-    public bool $couponApplied = false;
+    /** @var array<int, array<string, mixed>> */
+    public array $items = [];
 
-    protected $rules = [
+    public float $subtotal      = 0.0;
+    public float $discountTotal = 0.0;
+    public float $total         = 0.0;
+    public int   $count         = 0;
+
+    public string  $couponCode    = '';
+    public ?string $couponMessage = null;
+    public bool    $couponApplied = false;
+
+    /** Shipping threshold */
+    public const FREE_SHIPPING_THRESHOLD = 99.0;
+    public const SHIPPING_COST           = 5.90;
+
+    protected CartService $cartService;
+
+    protected array $rules = [
         'couponCode' => 'required|string|min:3|max:30',
     ];
 
+    public function boot(CartService $cartService): void
+    {
+        $this->cartService = $cartService;
+    }
+
     public function mount(): void
     {
-        $this->items = collect();
         $this->loadCart();
     }
 
     #[On('cart-updated')]
     public function loadCart(): void
     {
-        $cartToken = session('cart_token');
-
-        if (!$cartToken) {
-            $this->items = collect();
-            $this->recalculate();
-            return;
-        }
-
-        $cart = Cart::where('session_token', $cartToken)->first();
-
-        if (!$cart) {
-            $this->items = collect();
-            $this->recalculate();
-            return;
-        }
-
-        $this->items = $cart->items()
-            ->with(['product', 'variant'])
-            ->get();
+        $this->items = array_values($this->cartService->get());
+        $this->count = $this->cartService->count();
 
         if (session('applied_coupon')) {
             $coupon = Coupon::find(session('applied_coupon'));
@@ -62,52 +59,35 @@ class CartPage extends Component
         $this->recalculate();
     }
 
-    public function updateQuantity(int $cartItemId, int $quantity): void
+    public function updateQuantity(int $productId, int $quantity): void
     {
         if ($quantity < 1) {
-            $this->removeItem($cartItemId);
+            $this->removeItem($productId);
             return;
         }
 
-        $item = CartItem::find($cartItemId);
-
-        if (!$item) {
-            return;
-        }
-
-        if ($item->variant && $item->variant->inventory) {
-            $availableStock = $item->variant->inventory->quantity;
-            if ($quantity > $availableStock) {
-                $this->dispatch('toast', ['type' => 'error', 'message' => 'Stock non sufficiente']);
-                return;
-            }
-        }
-
-        $item->update(['quantity' => $quantity]);
+        $this->cartService->update($productId, $quantity);
         $this->loadCart();
-        $this->dispatch('cart-updated', count: $this->items->count(), total: $this->total);
+        $this->dispatch('cart-updated');
     }
 
-    public function removeItem(int $cartItemId): void
+    public function removeItem(int $productId): void
     {
-        $item = CartItem::find($cartItemId);
-
-        if ($item) {
-            $item->delete();
-            $this->loadCart();
-            $this->dispatch('cart-updated', count: $this->items->count(), total: $this->total);
-            $this->dispatch('toast', ['type' => 'success', 'message' => 'Prodotto rimosso dal carrello']);
-        }
+        $this->cartService->remove($productId);
+        $this->loadCart();
+        $this->dispatch('cart-updated');
+        $this->dispatch('toast', ['type' => 'success', 'message' => 'Prodotto rimosso dal carrello.']);
     }
 
-    public function applyCoupon(): void
+    public function applyCoupon(string $code = ''): void
     {
+        $this->couponCode = $code ?: $this->couponCode;
         $this->validate();
 
         $coupon = Coupon::where('code', $this->couponCode)->valid()->first();
 
         if (!$coupon) {
-            $this->couponMessage = 'Codice coupon non valido o scaduto';
+            $this->couponMessage = 'Codice coupon non valido o scaduto.';
             $this->couponApplied = false;
             return;
         }
@@ -123,31 +103,38 @@ class CartPage extends Component
     public function removeCoupon(): void
     {
         session()->forget('applied_coupon');
-        $this->couponCode = '';
+        $this->couponCode    = '';
         $this->couponMessage = null;
         $this->couponApplied = false;
+
         $this->recalculate();
-        $this->dispatch('toast', ['type' => 'info', 'message' => 'Coupon rimosso']);
+        $this->dispatch('toast', ['type' => 'info', 'message' => 'Coupon rimosso.']);
     }
 
     protected function recalculate(): void
     {
-        $this->subtotal = $this->items->sum(fn($item) => $item->price * $item->quantity);
+        $this->subtotal = $this->cartService->total();
 
-        $this->discountTotal = 0;
+        $this->discountTotal = 0.0;
         if (session('applied_coupon')) {
             $coupon = Coupon::find(session('applied_coupon'));
             if ($coupon) {
-                $this->discountTotal = min($coupon->discount_amount, $this->subtotal);
+                $this->discountTotal = (float) min($coupon->discount_amount, $this->subtotal);
                 $this->couponApplied = true;
             }
         }
 
-        $this->total = max(0, $this->subtotal - $this->discountTotal);
+        $this->total = max(0.0, $this->subtotal - $this->discountTotal);
     }
 
     public function render()
     {
-        return view('livewire.public.cart.cart-page');
+        $shipping = ($this->subtotal >= self::FREE_SHIPPING_THRESHOLD || empty($this->items))
+            ? 0.0
+            : self::SHIPPING_COST;
+
+        $grandTotal = $this->total + $shipping;
+
+        return view('livewire.public.cart.cart-page', compact('shipping', 'grandTotal'));
     }
 }

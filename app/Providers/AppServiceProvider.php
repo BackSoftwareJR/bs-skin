@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Observers\CategoryObserver;
 use App\Observers\OtpCodeObserver;
 use App\Observers\ProductObserver;
+use App\Services\CartService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(CartService::class, fn() => new CartService());
     }
 
     /**
