@@ -11,30 +11,30 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Nome -->
                 <div>
-                    <label for="firstName" class="block text-sm font-medium text-neutral-700 mb-1">
+                    <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">
                         Nome <span class="text-danger">*</span>
                     </label>
-                    <input type="text" 
-                           id="firstName" 
-                           wire:model="firstName"
+                    <input type="text"
+                           id="name"
+                           wire:model="name"
                            placeholder="Mario"
-                           class="w-full rounded-xl border-neutral-300 focus:border-brand-primary focus:ring-brand-primary/20 @error('firstName') border-danger @enderror">
-                    @error('firstName')
+                           class="w-full rounded-xl border-neutral-300 focus:border-brand-primary focus:ring-brand-primary/20 @error('name') border-danger @enderror">
+                    @error('name')
                         <p class="text-xs text-danger mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Cognome -->
                 <div>
-                    <label for="lastName" class="block text-sm font-medium text-neutral-700 mb-1">
+                    <label for="surname" class="block text-sm font-medium text-neutral-700 mb-1">
                         Cognome <span class="text-danger">*</span>
                     </label>
-                    <input type="text" 
-                           id="lastName" 
-                           wire:model="lastName"
+                    <input type="text"
+                           id="surname"
+                           wire:model="surname"
                            placeholder="Rossi"
-                           class="w-full rounded-xl border-neutral-300 focus:border-brand-primary focus:ring-brand-primary/20 @error('lastName') border-danger @enderror">
-                    @error('lastName')
+                           class="w-full rounded-xl border-neutral-300 focus:border-brand-primary focus:ring-brand-primary/20 @error('surname') border-danger @enderror">
+                    @error('surname')
                         <p class="text-xs text-danger mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -45,8 +45,8 @@
                 <label for="email" class="block text-sm font-medium text-neutral-700 mb-1">
                     Email
                 </label>
-                <input type="email" 
-                       id="email" 
+                <input type="email"
+                       id="email"
                        value="{{ $email }}"
                        readonly
                        class="w-full rounded-xl border-neutral-300 bg-neutral-50 text-neutral-500 cursor-not-allowed">
@@ -60,8 +60,8 @@
                 <label for="phone" class="block text-sm font-medium text-neutral-700 mb-1">
                     Telefono
                 </label>
-                <input type="tel" 
-                       id="phone" 
+                <input type="tel"
+                       id="phone"
                        wire:model="phone"
                        placeholder="+39 123 456 7890"
                        class="w-full rounded-xl border-neutral-300 focus:border-brand-primary focus:ring-brand-primary/20 @error('phone') border-danger @enderror">
@@ -73,7 +73,7 @@
             <!-- Marketing consent -->
             <div class="pt-4 border-t border-neutral-200">
                 <label class="inline-flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" 
+                    <input type="checkbox"
                            wire:model="marketingConsent"
                            class="mt-1 h-4 w-4 rounded-md border-neutral-300 text-brand-primary focus:ring-brand-primary/20">
                     <div>
@@ -87,7 +87,7 @@
 
             <!-- Submit -->
             <div class="pt-4">
-                <button type="submit" 
+                <button type="submit"
                         class="btn-primary"
                         wire:loading.attr="disabled">
                     <span wire:loading.remove>Salva modifiche</span>

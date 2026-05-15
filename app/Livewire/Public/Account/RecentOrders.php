@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Public\Account;
 
 use App\Models\Order;
@@ -9,18 +11,18 @@ class RecentOrders extends Component
 {
     public function render()
     {
-        $customerId = session('skintemple_customer_id');
-        
-        $recentOrders = $customerId 
+        $customerId = auth('customer')->id();
+
+        $recentOrders = $customerId
             ? Order::where('customer_id', $customerId)
                 ->with(['items'])
                 ->latest()
-                ->limit(3)
+                ->limit(5)
                 ->get()
             : collect();
-        
+
         return view('livewire.public.account.recent-orders', [
-            'recentOrders' => $recentOrders
+            'recentOrders' => $recentOrders,
         ]);
     }
 }

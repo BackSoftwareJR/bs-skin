@@ -1,37 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Public\Account;
 
 use Livewire\Component;
 
 class ProfileEditor extends Component
 {
-    public string $firstName = '';
-    public string $lastName = '';
+    public string $name = '';
+    public string $surname = '';
     public string $email = '';
     public string $phone = '';
     public bool $marketingConsent = false;
 
     protected $rules = [
-        'firstName' => 'required|string|max:100',
-        'lastName' => 'required|string|max:100',
-        'phone' => 'nullable|string|max:20',
+        'name'             => 'required|string|max:100',
+        'surname'          => 'required|string|max:100',
+        'phone'            => 'nullable|string|max:20',
         'marketingConsent' => 'boolean',
     ];
 
-    public function mount(): void
+    protected $messages = [
+        'name.required'    => 'Il nome è obbligatorio.',
+        'surname.required' => 'Il cognome è obbligatorio.',
+    ];
+
+    public function mount(): mixed
     {
         $customer = auth('customer')->user();
-        
+
         if (!$customer) {
             return redirect('/account/login');
         }
 
-        $this->firstName = $customer->first_name ?? '';
-        $this->lastName = $customer->last_name ?? '';
-        $this->email = $customer->email;
-        $this->phone = $customer->phone ?? '';
+        $this->name             = $customer->name ?? '';
+        $this->surname          = $customer->surname ?? '';
+        $this->email            = $customer->email;
+        $this->phone            = $customer->phone ?? '';
         $this->marketingConsent = $customer->marketing_consent ?? false;
+
+        return null;
     }
 
     public function save(): void
@@ -39,21 +48,21 @@ class ProfileEditor extends Component
         $this->validate();
 
         $customer = auth('customer')->user();
-        
+
         if (!$customer) {
             return;
         }
 
         $customer->update([
-            'first_name' => $this->firstName,
-            'last_name' => $this->lastName,
-            'phone' => $this->phone,
-            'marketing_consent' => $this->marketingConsent,
+            'name'               => $this->name,
+            'surname'            => $this->surname,
+            'phone'              => $this->phone ?: null,
+            'marketing_consent'  => $this->marketingConsent,
         ]);
 
         $this->dispatch('toast', [
-            'type' => 'success',
-            'message' => 'Profilo aggiornato con successo!'
+            'type'    => 'success',
+            'message' => 'Profilo aggiornato con successo!',
         ]);
     }
 

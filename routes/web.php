@@ -65,6 +65,14 @@ Route::get('/blog/{slug}', fn($slug) => view('public.blog.show', ['slug' => $slu
 Route::get('/chi-siamo', fn() => view('public.pages.about'))->name('about');
 Route::get('/contatti', fn() => view('public.pages.contact'))->name('contact');
 
+// Legal pages
+Route::get('/privacy-policy', fn() => view('public.pages.privacy'))->name('privacy');
+Route::get('/termini-di-servizio', fn() => view('public.pages.terms'))->name('terms');
+Route::get('/cookie-policy', fn() => view('public.pages.cookies'))->name('cookies');
+
+// Support page
+Route::get('/supporto', fn() => view('public.pages.show', ['slug' => 'supporto']))->name('support');
+
 // Pagine CMS generiche (deve essere ULTIMA per non sovrascrivere rotte specifiche)
 Route::get('/{slug}', fn($slug) => view('public.pages.show', ['slug' => $slug]))
     ->name('page.show')

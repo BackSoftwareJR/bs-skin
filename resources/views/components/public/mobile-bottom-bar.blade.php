@@ -39,10 +39,10 @@
         </a>
 
         <!-- Cart -->
-        <button @click="$dispatch('cart-open')"
+        <button @click="$dispatch('open-cart-drawer')"
                 x-data
                 class="relative flex flex-col items-center justify-center space-y-1 text-neutral-400 hover:text-brand-primary transition-colors"
-                @cart-updated.window="$event.detail.count > 0 ? ($el.querySelector('.cart-badge').textContent = $event.detail.count, $el.querySelector('.cart-badge').classList.remove('hidden')) : $el.querySelector('.cart-badge').classList.add('hidden')">
+                @cart-updated.window="$event.detail.count > 0 ? ($el.querySelector('.cart-badge').textContent = $event.detail.count, $el.querySelector('.cart-badge').classList.remove('hidden'), $el.querySelector('.cart-badge').classList.add('flex')) : ($el.querySelector('.cart-badge').classList.add('hidden'), $el.querySelector('.cart-badge').classList.remove('flex'))">
             <div class="relative">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v0a1 1 0 001 1h10"></path>
