@@ -1,4 +1,6 @@
-<div x-data="{ open: @entangle('isOpen') }" x-trap.noscroll="open">
+<div x-data="{ open: @entangle('isOpen') }"
+     x-trap.noscroll="open"
+     @cart-open.window="open = true">
     <!-- Backdrop -->
     <div x-show="open" 
          @click="$wire.close()" 

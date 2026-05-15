@@ -61,6 +61,10 @@ Route::get('/newsletter/conferma/{email}/{token}', [NewsletterController::class,
 Route::get('/blog', fn() => view('public.blog.index'))->name('blog.index');
 Route::get('/blog/{slug}', fn($slug) => view('public.blog.show', ['slug' => $slug]))->name('blog.show');
 
+// Static pages
+Route::get('/chi-siamo', fn() => view('public.pages.about'))->name('about');
+Route::get('/contatti', fn() => view('public.pages.contact'))->name('contact');
+
 // Pagine CMS generiche (deve essere ULTIMA per non sovrascrivere rotte specifiche)
 Route::get('/{slug}', fn($slug) => view('public.pages.show', ['slug' => $slug]))
     ->name('page.show')

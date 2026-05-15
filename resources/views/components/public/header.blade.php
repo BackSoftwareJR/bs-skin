@@ -32,15 +32,18 @@
                     </div>
                 </div>
 
-                <a href="#" class="text-sm font-medium text-brand-ink-soft hover:text-brand-primary transition-colors">Tecnologie</a>
-                <a href="#" class="text-sm font-medium text-brand-ink-soft hover:text-brand-primary transition-colors">Chi Siamo</a>
-                <a href="#" class="text-sm font-medium text-brand-ink-soft hover:text-brand-primary transition-colors">Blog</a>
+                <a href="{{ route('technologies.index') }}" 
+                   class="text-sm font-medium {{ request()->routeIs('technologies.index') ? 'text-brand-primary border-b-2 border-brand-primary pb-1' : 'text-brand-ink-soft hover:text-brand-primary' }} transition-colors">Tecnologie</a>
+                <a href="{{ route('about') }}" 
+                   class="text-sm font-medium {{ request()->routeIs('about') ? 'text-brand-primary border-b-2 border-brand-primary pb-1' : 'text-brand-ink-soft hover:text-brand-primary' }} transition-colors">Chi Siamo</a>
             </nav>
 
             <!-- Actions -->
             <div class="flex items-center space-x-4">
                 <!-- Search -->
-                <button class="p-2 text-brand-ink-soft hover:text-brand-primary transition-colors">
+                <button x-data @click="$dispatch('open-search')" 
+                        aria-label="Cerca"
+                        class="p-2 text-brand-ink-soft hover:text-brand-primary transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -54,15 +57,19 @@
                 </a>
 
                 <!-- Cart -->
-                <button class="relative p-2 text-brand-ink-soft hover:text-brand-primary transition-colors">
+                <button @click="$dispatch('cart-open')"
+                        aria-label="Carrello"
+                        class="relative p-2 text-brand-ink-soft hover:text-brand-primary transition-colors"
+                        x-data
+                        @cart-updated.window="$event.detail.count > 0 ? ($el.querySelector('.cart-badge').textContent = $event.detail.count, $el.querySelector('.cart-badge').classList.remove('hidden')) : $el.querySelector('.cart-badge').classList.add('hidden')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v0a1 1 0 001 1h10"></path>
                     </svg>
-                    <span class="absolute -top-1 -right-1 bg-brand-primary text-white text-2xs font-medium rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    <span class="cart-badge absolute -top-1 -right-1 bg-brand-primary text-white text-2xs font-medium rounded-full h-5 w-5 items-center justify-center hidden"></span>
                 </button>
 
                 <!-- CTA -->
-                <a href="#" class="hidden lg:inline-flex btn-secondary">Contattaci</a>
+                <a href="{{ route('contact') }}" class="hidden lg:inline-flex btn-secondary">Contattaci</a>
 
                 <!-- Mobile menu button -->
                 <button class="lg:hidden p-2 text-brand-ink-soft hover:text-brand-primary">

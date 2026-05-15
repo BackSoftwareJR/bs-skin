@@ -42,12 +42,13 @@ class OtpLoginForm extends Component
         'otpCode.size' => 'Il codice deve essere di 6 cifre.',
     ];
 
-    public function mount(): void
+    public function mount(): mixed
     {
-        // Se l'utente è già loggato, reindirizza
         if (auth('customer')->check()) {
             return redirect('/account');
         }
+
+        return null;
     }
 
     public function requestOtp(): void

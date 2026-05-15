@@ -19,13 +19,14 @@
             <span class="text-2xs font-medium">Shop</span>
         </a>
 
-        <!-- Cart -->
-        <button class="flex flex-col items-center justify-center space-y-1 text-neutral-400 relative">
+        <!-- Search -->
+        <button @click="$dispatch('open-search')"
+                x-data
+                class="flex flex-col items-center justify-center space-y-1 text-neutral-400 hover:text-brand-primary transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v0a1 1 0 001 1h10"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-            <span class="absolute -top-2 -right-2 bg-brand-primary text-white text-2xs font-medium rounded-full h-4 w-4 flex items-center justify-center">3</span>
-            <span class="text-2xs font-medium">Carrello</span>
+            <span class="text-2xs font-medium">Cerca</span>
         </button>
 
         <!-- Account -->
@@ -37,13 +38,18 @@
             <span class="text-2xs font-medium">Account</span>
         </a>
 
-        <!-- Menu -->
-        <button class="flex flex-col items-center justify-center space-y-1 text-neutral-400"
-                x-data x-on:click="$dispatch('mobile-menu-toggle')">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-            <span class="text-2xs font-medium">Menu</span>
+        <!-- Cart -->
+        <button @click="$dispatch('cart-open')"
+                x-data
+                class="relative flex flex-col items-center justify-center space-y-1 text-neutral-400 hover:text-brand-primary transition-colors"
+                @cart-updated.window="$event.detail.count > 0 ? ($el.querySelector('.cart-badge').textContent = $event.detail.count, $el.querySelector('.cart-badge').classList.remove('hidden')) : $el.querySelector('.cart-badge').classList.add('hidden')">
+            <div class="relative">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293A1 1 0 004 16v0a1 1 0 001 1h10"></path>
+                </svg>
+                <span class="cart-badge absolute -top-2 -right-2 bg-brand-primary text-white text-2xs font-medium rounded-full h-4 w-4 items-center justify-center hidden"></span>
+            </div>
+            <span class="text-2xs font-medium">Carrello</span>
         </button>
     </div>
 </div>

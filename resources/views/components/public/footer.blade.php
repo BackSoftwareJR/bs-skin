@@ -32,9 +32,9 @@
                     <ul class="space-y-2 text-sm">
                         <li><a href="{{ route('home') }}" class="text-neutral-400 hover:text-white transition-colors">Home</a></li>
                         <li><a href="{{ route('shop.index') }}" class="text-neutral-400 hover:text-white transition-colors">Prodotti</a></li>
-                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Tecnologie</a></li>
-                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Chi Siamo</a></li>
-                        <li><a href="#" class="text-neutral-400 hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="{{ route('technologies.index') }}" class="text-neutral-400 hover:text-white transition-colors">Tecnologie</a></li>
+                        <li><a href="{{ route('about') }}" class="text-neutral-400 hover:text-white transition-colors">Chi Siamo</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-neutral-400 hover:text-white transition-colors">Contatti</a></li>
                     </ul>
                 </div>
 

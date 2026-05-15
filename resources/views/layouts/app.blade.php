@@ -25,6 +25,9 @@
     <x-public.footer />
     
     <x-public.mobile-bottom-bar />
+
+    <livewire:public.cart.cart-drawer />
+    <livewire:public.catalog.product-search />
     
     @livewireScripts
     @stack('scripts')

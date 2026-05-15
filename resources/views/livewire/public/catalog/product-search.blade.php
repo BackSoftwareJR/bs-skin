@@ -1,4 +1,6 @@
-<div x-data="{ open: @entangle('isOpen') }" x-trap.noscroll="open">
+<div x-data="{ open: @entangle('isOpen') }"
+     x-trap.noscroll="open"
+     @open-search.window="open = true">
     <!-- Overlay fullscreen -->
     <div x-show="open"
          x-transition:enter="transition ease-apple duration-200"

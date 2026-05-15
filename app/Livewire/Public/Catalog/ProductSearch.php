@@ -20,7 +20,7 @@ class ProductSearch extends Component
     public bool $isOpen = false;
     public bool $loading = false;
 
-    protected $listeners = ['open-search' => 'open'];
+    protected $listeners = ['open-search' => 'open', 'openSearch' => 'open'];
 
     public function mount(): void
     {

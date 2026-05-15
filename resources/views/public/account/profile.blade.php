@@ -1,6 +1,8 @@
-<x-layouts.app>
-  <x-public.container class="py-12 max-w-2xl">
-    <h1 class="font-display text-3xl mb-8">Il mio profilo</h1>
+<x-public.account-layout title="Il mio profilo">
+
+  <div class="bg-white rounded-2xl shadow-soft-sm p-6 lg:p-8">
+    <h1 class="font-display text-2xl text-brand-ink mb-6">Il mio profilo</h1>
     <livewire:public.account.profile-editor />
-  </x-public.container>
-</x-layouts.app>
+  </div>
+
+</x-public.account-layout>
