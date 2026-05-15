@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>{{ config('app.name', 'SkinTemple') }}</title>
+    <title>@yield('title', config('app.name', 'SkinTemple'))</title>
 
     <link rel="icon" href="{{ asset('favicon.ico') }}">
 
+    @stack('meta')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
@@ -18,7 +19,7 @@
     <x-public.header />
     
     <main class="min-h-screen">
-        {{ $slot }}
+        @yield('content')
     </main>
     
     <x-public.footer />
