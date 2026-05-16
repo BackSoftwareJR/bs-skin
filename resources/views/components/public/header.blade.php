@@ -1,6 +1,10 @@
 @inject('cartService', 'App\Services\CartService')
-<div x-data="{ mobileMenuOpen: false, productsOpen: false }">
-<header class="sticky top-0 bg-white shadow-soft-sm z-40">
+<div x-data="{ mobileMenuOpen: false, productsOpen: false, scrolled: false }"
+     @scroll.window="scrolled = (window.pageYOffset || document.documentElement.scrollTop) > 8">
+<header
+    class="sticky top-0 z-50 bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 transition-[box-shadow,border-color] duration-200 border-b"
+    :class="scrolled ? 'shadow-md border-brand-border/50' : 'shadow-soft-sm border-transparent'"
+>
     <x-public.container>
         <div class="flex items-center justify-between h-16 lg:h-20">
             <!-- Logo -->
@@ -128,7 +132,7 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
      @click="mobileMenuOpen = false"
-     class="fixed inset-0 bg-black/40 z-50 lg:hidden backdrop-blur-sm"
+     class="fixed inset-0 bg-black/40 z-[60] lg:hidden backdrop-blur-sm"
      style="display: none;">
 </div>
 
@@ -140,7 +144,7 @@
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="translate-x-0"
      x-transition:leave-end="-translate-x-full"
-     class="fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-white shadow-2xl lg:hidden flex flex-col"
+     class="fixed inset-y-0 left-0 z-[60] w-80 max-w-[85vw] bg-white shadow-2xl lg:hidden flex flex-col"
      style="display: none;"
      @keydown.escape.window="mobileMenuOpen = false">
 

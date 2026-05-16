@@ -4,7 +4,7 @@
     x-transition:leave="transition-all duration-300"
     x-transition:leave-start="opacity-100 transform translate-y-0"
     x-transition:leave-end="opacity-0 transform -translate-y-full"
-    class="bg-brand-primary text-white py-2 text-xs text-center relative z-50"
+    class="bg-brand-primary text-white py-2 text-xs text-center"
 >
     <x-public.container>
         <div class="flex items-center justify-between">

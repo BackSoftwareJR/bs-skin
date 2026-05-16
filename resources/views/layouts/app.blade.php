@@ -13,12 +13,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="h-full">
+<body class="min-h-full flex flex-col">
     <x-public.announcement-bar />
-    
+
     <x-public.header />
-    
-    <main class="min-h-screen">
+
+    <main class="min-h-screen flex-1 pb-20 md:pb-0">
         @yield('content')
     </main>
     

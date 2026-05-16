@@ -1,4 +1,4 @@
-<div class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white shadow-soft-xl border-t border-brand-border"
+<div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 shadow-soft-xl border-t border-brand-border"
      style="padding-bottom: env(safe-area-inset-bottom);">
     <div class="grid grid-cols-5 h-16">
         <!-- Home -->

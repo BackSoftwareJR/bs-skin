@@ -21,7 +21,7 @@
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar filtri (desktop) -->
             <aside class="hidden lg:block w-64 flex-shrink-0">
-                <div class="sticky top-8">
+                <div class="sticky top-20 lg:top-24">
                     <livewire:public.catalog.product-filters />
                 </div>
             </aside>

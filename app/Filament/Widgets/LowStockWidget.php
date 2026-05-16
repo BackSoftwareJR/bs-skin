@@ -19,7 +19,7 @@ class LowStockWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return Schema::hasTable('inventories') && Schema::hasTable('product_variants');
+        return Schema::hasTable('inventory') && Schema::hasTable('product_variants');
     }
 
     public function table(Table $table): Table

@@ -16,6 +16,9 @@ git pull origin main
 echo "[3/7] Composer install (no-dev)..."
 composer2 install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+echo "[3b/7] Filament assets (admin CSS/JS)..."
+php artisan filament:assets
+
 echo "[4/7] Migrations..."
 php artisan migrate --force
 

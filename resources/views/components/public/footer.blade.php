@@ -1,4 +1,4 @@
-<footer class="bg-brand-ink text-white">
+<footer class="bg-brand-ink text-white pb-20 md:pb-0">
     <x-public.container>
         <div class="py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -6,12 +6,18 @@ use App\Models\NewsletterSubscriber;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class NewsletterStatsWidget extends BaseWidget
 {
     protected static ?int $sort = 4;
     
     protected int | string | array $columnSpan = 1;
+
+    public static function canView(): bool
+    {
+        return Schema::hasTable('newsletter_subscribers');
+    }
 
     protected function getStats(): array
     {

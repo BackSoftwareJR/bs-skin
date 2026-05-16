@@ -2,10 +2,11 @@
 
 namespace App\Filament\Widgets;
 
-use Spatie\Activitylog\Models\Activity;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Schema;
+use Spatie\Activitylog\Models\Activity;
 
 class RecentActivityWidget extends BaseWidget
 {
@@ -14,6 +15,11 @@ class RecentActivityWidget extends BaseWidget
     protected int | string | array $columnSpan = 'full';
     
     protected static ?string $heading = 'Attività Recente';
+
+    public static function canView(): bool
+    {
+        return Schema::hasTable('activity_log');
+    }
 
     public function table(Table $table): Table
     {

@@ -11,7 +11,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          @keydown.escape.window="$wire.close()"
-         class="fixed inset-0 z-50 bg-surface/95 backdrop-blur-xl"
+         class="fixed inset-0 z-[100] bg-surface/95 backdrop-blur-xl"
          role="dialog" aria-modal="true" aria-label="Ricerca">
 
         <div class="mx-auto max-w-2xl px-4 pt-20 sm:pt-32">

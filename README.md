@@ -34,6 +34,9 @@ npm run dev      # sviluppo con hot reload
 # Avvia
 php artisan serve
 # Apri http://localhost:8000 e http://localhost:8000/admin
+
+# Admin Filament: dopo composer install o deploy, pubblica CSS/JS del pannello
+php artisan filament:assets
 ```
 
 ## Logo

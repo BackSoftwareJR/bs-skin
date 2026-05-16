@@ -48,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Sistema')->icon('heroicon-o-server')->collapsible(true),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            // DashboardPage is auto-discovered; do not register Filament\Pages\Dashboard here (route conflict).
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
