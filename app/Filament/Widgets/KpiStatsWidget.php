@@ -6,12 +6,18 @@ use App\Models\Order;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class KpiStatsWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
     
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return Schema::hasTable('orders');
+    }
 
     protected function getStats(): array
     {

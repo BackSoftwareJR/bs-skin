@@ -7,6 +7,7 @@ use App\Models\ProductVariant;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Schema;
 
 class LowStockWidget extends BaseWidget
 {
@@ -15,6 +16,11 @@ class LowStockWidget extends BaseWidget
     protected int | string | array $columnSpan = 1;
     
     protected static ?string $heading = 'Stock Sotto Soglia';
+
+    public static function canView(): bool
+    {
+        return Schema::hasTable('inventories') && Schema::hasTable('product_variants');
+    }
 
     public function table(Table $table): Table
     {

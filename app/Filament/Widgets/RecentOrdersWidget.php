@@ -6,6 +6,7 @@ use App\Models\Order;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Schema;
 
 class RecentOrdersWidget extends BaseWidget
 {
@@ -14,6 +15,11 @@ class RecentOrdersWidget extends BaseWidget
     protected int | string | array $columnSpan = 1;
     
     protected static ?string $heading = 'Ultimi Ordini';
+
+    public static function canView(): bool
+    {
+        return Schema::hasTable('orders');
+    }
 
     public function table(Table $table): Table
     {
